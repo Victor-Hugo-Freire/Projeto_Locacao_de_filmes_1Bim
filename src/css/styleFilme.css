@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Secular+One&display=swap");
+
+body {
+  background-color: rgba(0, 0, 0);
+  font-family: "Roboto", sans-serif;
+  overflow-x: hidden;
+
+  header {
+    padding: 0 10px;
+    background-color: rgb(42, 41, 41);
+
+    a {
+      display: inline-block;
+    }
+  }
+}
+main {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+
+  .imagem-filme {
+    width: 75%;
+  }
+
+  .imagem-filme #capa-filme {
+    width: 100vw;
+    height: 94vh;
+    background-size: cover;
+    object-fit: fill;
+    display: block;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-blend-mode: color;
+  }
+
+  .conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+    margin: 20px;
+    background-color: rgb(75, 75, 75);
+    border-radius: 10px;
+    padding: 20px;
+    gap: 10px;
+    color: #fff;
+    font-size: 1.5rem;
+  }
+
+  .btn-download {
+    width: 120px;
+    height: 120px;
+    color: #000;
+    background-color: #fff;
+    transition: 0.5s ease-out;
+    border-radius: 10px;
+  }
+
+  .btn-download:hover {
+    color: #fff;
+    background-color: #cc4a4a;
+    transition: 0.5s ease-in-out;
+  }
+}
