@@ -14,7 +14,7 @@ header {
   align-items: center;
   justify-content: space-between;
   position: fixed;
-
+  z-index: 1;
   padding: 0 10px;
 }
 
@@ -28,16 +28,97 @@ nav {
     gap: 30px;
   }
 
-  ul a li:hover {
+  ul li a:hover {
+    color: #cc4a4a;
+    text-decoration: underline;
+  }
+
+  ul li .ativado {
     color: #e65c5c;
     text-decoration: underline;
   }
 }
 
-main section div img {
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-  object-fit: fit;
-  display: block;
+section {
+  color: #fff;
+
+  .slider {
+    overflow: hidden;
+  }
+
+  .slider .slide {
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .slider .slide.selecionado {
+    display: block;
+  }
+
+  div img {
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    object-fit: fit;
+    display: block;
+  }
+
+  .btn {
+    position: absolute;
+    top: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .btn {
+    color: #fff;
+    font-size: 1.2rem;
+  }
+
+  .btn-voltar {
+    left: 15px;
+  }
+
+  .btn-avancar {
+    right: 15px;
+  }
+
+  .btn:hover {
+    background-color: #e65c5c;
+    transition: 0.5s ease-in-out;
+  }
+
+  .btn-play {
+    right: 3%;
+    top: 90%;
+    width: 70px;
+    height: 65px;
+    font-size: 2rem;
+  }
+
+  .conteudo {
+    background-color: rgba(0, 0, 0, 0.75);
+    position: absolute;
+    top: 9.8%;
+    left: 9%;
+    padding: 20px;
+    width: 30vw;
+    height: 90vh;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+  }
 }

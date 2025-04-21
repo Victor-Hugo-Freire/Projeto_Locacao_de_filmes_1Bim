@@ -16,25 +16,39 @@
       rel="stylesheet"
       href="/VictorHugo-projeto1Bimestre/src/css/style.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
     <title>VH FLIX</title>
   </head>
   <body>
     <header>
-      <img
-        class="title"
-        src="/VictorHugo-projeto1Bimestre/src/imgs/title.png"
-        alt="Logo"
-      />
+      <a href="/VictorHugo-projeto1Bimestre/index.html">
+        <img
+          class="logo"
+          src="/VictorHugo-projeto1Bimestre/src/imgs/title.png"
+          alt="Logo"
+        />
+      </a>
       <div>
         <nav>
           <ul>
-            <a href="/VictorHugo-projeto1Bimestre/index.html"
-              ><li>Nos Cinemas</li></a
-            ><a href="/VictorHugo-projeto1Bimestre/lancamentos.html"
-              ><li>Lançamentos</li></a
-            ><a href="/VictorHugo-projeto1Bimestre/populares.html"
-              ><li>Populares</li></a
-            >
+            <li>
+              <a class="ativado" href="/VictorHugo-projeto1Bimestre/index.html"
+                >Nos Cinemas</a
+              >
+            </li>
+            <li>
+              <a href="/VictorHugo-projeto1Bimestre/lancamentos.html"
+                >Lançamentos</a
+              >
+            </li>
+            <li>
+              <a href="/VictorHugo-projeto1Bimestre/populares.html"
+                >Populares</a
+              >
+            </li>
           </ul>
         </nav>
       </div>
@@ -42,18 +56,65 @@
 
     <main>
       <section id="cinemas">
-        <div class="slider cinemas">
-          <img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/home1.jpg"
-            alt="Cinemas 1"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/home2.jpg"
-            alt="Cinemas 2"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/home3.jpg"
-            alt="Cinemas 3"
-          />
+        <button class="btn btn-voltar">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="slider">
+          <div class="slide selecionado">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/home1.jpg"
+              alt="Cinemas 1"
+            />
+            <div class="conteudo">
+              <h2 class="title">Venom: Tempo de Carnificina</h2>
+              <p class="descricao">
+                Eddie Brock e Venom enfrentam Carnificina, simbionte ainda mais
+                violento. A cidade torna-se palco de caos enquanto eles lutam
+                pelo controle do corpo. No limiar entre herói e monstro, Brock
+                precisa decidir até onde vai para salvar inocentes.
+              </p>
+            </div>
+          </div>
+
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/home2.jpg"
+              alt="Cinemas 2"
+            />
+            <div class="conteudo">
+              <h2 class="title">Vingadores: Guerra Infinita</h2>
+              <p class="descricao">
+                Thanos invade o universo em busca das Joias do Infinito. Os
+                Vingadores, divididos, unem forças em batalhas épicas na Terra e
+                no espaço. Sacrifícios dolorosos definem o destino de cada herói
+                e do próprio cosmos.
+              </p>
+            </div>
+          </div>
+
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/home3.jpg"
+              alt="Cinemas 3"
+            />
+            <div class="conteudo">
+              <h2 class="title">Homem-Aranha: Longe de Casa</h2>
+              <p class="descricao">
+                Peter Parker tenta relaxar em férias pela Europa após grandes
+                perdas. Surgem criaturas Elementais e o misterioso Mysterio, que
+                promete ajudar. Entre cenários exóticos e desafios, Peter
+                descobre o peso de ser herói adolescente.
+              </p>
+            </div>
+          </div>
         </div>
+        <button class="btn btn-avancar">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <a href="/VictorHugo-projeto1Bimestre/filme.html">
+          <button class="btn btn-play"><i class="fa-solid fa-play"></i></button>
+        </a>
       </section>
     </main>
     <script src="/VictorHugo-projeto1Bimestre/src/js/script.js"></script>

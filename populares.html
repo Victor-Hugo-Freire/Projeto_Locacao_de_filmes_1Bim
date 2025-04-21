@@ -16,25 +16,39 @@
       rel="stylesheet"
       href="/VictorHugo-projeto1Bimestre/src/css/style.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
     <title>VH FLIX</title>
   </head>
   <body>
     <header>
-      <img
-        class="title"
-        src="/VictorHugo-projeto1Bimestre/src/imgs/title.png"
-        alt="Logo"
-      />
+      <a href="/VictorHugo-projeto1Bimestre/index.html">
+        <img
+          class="logo"
+          src="/VictorHugo-projeto1Bimestre/src/imgs/title.png"
+          alt="Logo"
+        />
+      </a>
       <div>
         <nav>
           <ul>
-            <a href="/VictorHugo-projeto1Bimestre/index.html"
-              ><li>Nos Cinemas</li></a
-            ><a href="/VictorHugo-projeto1Bimestre/lancamentos.html"
-              ><li>Lançamentos</li></a
-            ><a href="/VictorHugo-projeto1Bimestre/populares.html"
-              ><li>Populares</li></a
-            >
+            <li>
+              <a href="/VictorHugo-projeto1Bimestre/index.html">Nos Cinemas</a>
+            </li>
+            <li>
+              <a href="/VictorHugo-projeto1Bimestre/lancamentos.html"
+                >Lançamentos</a
+              >
+            </li>
+            <li>
+              <a
+                class="ativado"
+                href="/VictorHugo-projeto1Bimestre/populares.html"
+                >Populares</a
+              >
+            </li>
           </ul>
         </nav>
       </div>
@@ -42,39 +56,165 @@
 
     <main>
       <section id="populares">
+        <button class="btn btn-voltar" onclick="voltar()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
         <div class="slider populares">
-          <img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m1.jpg"
-            alt="Popular 1"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m2.jpg"
-            alt="Popular 2"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m3.jpg"
-            alt="Popular 3"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m4.jpg"
-            alt="Popular 4"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m5.jpg"
-            alt="Popular 5"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m6.jpg"
-            alt="Popular 6"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m7.jpg"
-            alt="Popular 7"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m8.png"
-            alt="Popular 8"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m9.jpg"
-            alt="Popular 9"
-          /><img
-            src="/VictorHugo-projeto1Bimestre/src/imgs/m10.jpg"
-            alt="Popular 10"
-          />
+          <div class="slide selecionado">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m1.jpg"
+              alt="Popular 1"
+            />
+            <div class="conteudo">
+              <h2 class="title">Venom</h2>
+              <p class="descricao">
+                Jornalista Eddie Brock adquire poderes ao se fundir a um
+                simbionte alienígena. Dotado de força sobre-humana e camuflagem,
+                ele confronta uma megacorporação. No embate interno, Venom
+                define o limite entre justiça e instinto predatório.
+              </p>
+            </div>
+          </div>
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m2.jpg"
+              alt="Popular 2"
+            />
+            <div class="conteudo">
+              <h2 class="title">Dunkirk</h2>
+              <p class="descricao">
+                Milhares de soldados aliados estão encurralados na praia de
+                Dunkirk, em 1940. Civis britânicos mobilizam embarcações para
+                resgatar combatentes sob bombardeio. Tensão e coragem se
+                misturam em uma retirada marcada pela luta pela vida.
+              </p>
+            </div>
+          </div>
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m3.jpg"
+              alt="Popular 3"
+            />
+            <div class="conteudo">
+              <h2 class="title">Batman vs Superman: A Origem da Justiça</h2>
+              <p class="descricao">
+                Bruce Wayne vê o poder de Superman como ameaça à humanidade.
+                Enquanto se preparam para o duelo, Lex Luthor manipula eventos
+                nos bastidores. Quando heróis colidem, surgem questionamentos
+                sobre justiça e vingança.
+              </p>
+            </div>
+          </div>
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m4.jpg"
+              alt="Popular 4"
+            />
+            <div class="conteudo">
+              <h2 class="title">
+                John Wick: Um Novo Dia Para Matar (Capítulo 2)
+              </h2>
+              <p class="descricao">
+                John Wick é obrigado a cumprir um antigo juramento de sangue.
+                Assassinos do mundo inteiro caçam sua cabeça enquanto ele luta
+                pela liberdade. Em tiroteios e emboscadas, ele reafirma sua
+                lenda no submundo do crime.
+              </p>
+            </div>
+          </div>
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m5.jpg"
+              alt="Popular 5"
+            />
+            <div class="conteudo">
+              <h2 class="title">Aquaman</h2>
+              <p class="descricao">
+                Arthur Curry descobre sua herança como príncipe de Atlântida.
+                Dividido entre dois mundos, precisa impedir uma guerra entre
+                superfície e mar. Em busca de um tridente lendário, assume seu
+                destino de rei e protetor dos mares.
+              </p>
+            </div>
+          </div>
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m6.jpg"
+              alt="Popular 6"
+            />
+            <div class="conteudo">
+              <h2 class="title">Pantera Negra: Wakanda Para Sempre</h2>
+              <p class="descricao">
+                Com a morte de T’Challa, Wakanda enfrenta luto e ameaças
+                internas. Novos líderes surgem para proteger o vibranium e
+                honrar o legado real. Entre dor e esperança, Wakanda redefine
+                seu futuro sem seu rei.
+              </p>
+            </div>
+          </div>
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m7.jpg"
+              alt="Popular 7"
+            />
+            <div class="conteudo">
+              <h2 class="title">Thor</h2>
+              <p class="descricao">
+                O poderoso deus do trovão é expulso de Asgard por desafiar seu
+                pai. Na Terra, aprende lições de humildade e se torna digno de
+                seu martelo.
+              </p>
+            </div>
+          </div>
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m8.png"
+              alt="Popular 8"
+            />
+            <div class="conteudo">
+              <h2 class="title">Bumblebee</h2>
+              <p class="descricao">
+                Em 1987, Bee se esconde na forma de um fusca amarelo na Terra. A
+                jovem Charlie Watson o encontra e os dois formam uma forte
+                amizade. Perseguidos por Decepticons, descobrem juntos o poder
+                da confiança.
+              </p>
+            </div>
+          </div>
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m9.jpg"
+              alt="Popular 9"
+            />
+            <div class="conteudo">
+              <h2 class="title">Máquinas Mortais</h2>
+              <p class="descricao">
+                Cidades móveis devoram outras cidades num futuro
+                pós-apocalíptico. Tom Natsworthy e Hester Shaw tentam impedir
+                segredos mortais de Londres. Coragem e sacrifício definem a luta
+                pela sobrevivência urbana.
+              </p>
+            </div>
+          </div>
+          <div class="slide">
+            <img
+              src="/VictorHugo-projeto1Bimestre/src/imgs/m10.jpg"
+              alt="Popular 10"
+            />
+            <div class="conteudo">
+              <h2 class="title">Anjos da Noite: Guerras de Sangue</h2>
+              <p class="descricao">
+                Selene, caçadora de vampiros, foge de ambos os clãs após
+                revelações. Vampiros e lycans entram em guerra total, ameaçando
+                a existência dos dois. Protegendo sua filha, ela enfrenta
+                batalhas sangrentas por paz e redenção.
+              </p>
+            </div>
+          </div>
         </div>
+        <button class="btn btn-avancar" onclick="avancar()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
       </section>
     </main>
 
