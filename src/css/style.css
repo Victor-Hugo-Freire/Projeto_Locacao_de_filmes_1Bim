@@ -41,11 +41,11 @@ nav {
 section {
   color: #fff;
 
-  .slider {
+  .slides {
     overflow: hidden;
   }
 
-  .slider .slide {
+  .slides .slide {
     display: none;
     top: 0;
     left: 0;
@@ -53,7 +53,7 @@ section {
     height: 100vh;
   }
 
-  .slider .slide.selecionado {
+  .slides .slide.selecionado {
     display: block;
   }
 
