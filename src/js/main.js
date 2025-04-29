@@ -11,12 +11,18 @@ function mostrarSlide(indice) {
 }
 
 botaoVoltar.addEventListener("click", () => {
-  slideAtual = (slideAtual - 1 + slides.length) % slides.length;
+  slideAtual = slideAtual - 1;
+  if (slideAtual < 0) {
+    slideAtual = slides.length - 1;
+  }
   mostrarSlide(slideAtual);
 });
 
 botaoAvancar.addEventListener("click", () => {
-  slideAtual = (slideAtual + 1) % slides.length;
+  slideAtual = slideAtual + 1;
+  if (slideAtual > slides.length - 1) {
+    slideAtual = 0;
+  }
   mostrarSlide(slideAtual);
 });
 
