@@ -3,7 +3,7 @@
 body {
   background-color: rgba(0, 0, 0);
   font-family: "Roboto", sans-serif;
-  overflow-x: hidden;
+  overflow: hidden;
 
   header {
     padding: 0 10px;
@@ -30,8 +30,6 @@ main {
     background-size: cover;
     object-fit: fill;
     display: block;
-    background-color: rgba(0, 0, 0, 0.5);
-    background-blend-mode: color;
   }
 
   .conteudo {

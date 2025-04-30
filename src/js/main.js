@@ -32,5 +32,5 @@ playBtn.addEventListener("click", () => {
   const descricao = slide.querySelector(".descricao").textContent;
   const imgUrl = slide.querySelector("img").src;
   const params = new URLSearchParams({ title, descricao, imagem: imgUrl });
-  window.location.href = `filme.html?${params.toString()}`;
+  window.location.href = `../filme.html?${params.toString()}`;
 });
