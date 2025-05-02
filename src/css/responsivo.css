@@ -1,0 +1,103 @@
+@media (max-width: 768px) {
+  body {
+    overflow: hidden;
+  }
+
+  header {
+    position: relative;
+    height: 120px;
+  }
+
+  .header {
+    flex-direction: column;
+    justify-itens: center;
+  }
+
+  .logo {
+    width: 150px;
+    height: 70px;
+  }
+
+  nav ul li a {
+    font-size: 1.2rem;
+  }
+
+  .conteudo .title {
+    font-size: 1.4rem;
+  }
+
+  .conteudo .descricao {
+    font-size: 15px;
+    height: 6em;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  section div img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    object-position: center center;
+  }
+}
+
+@media (max-width: 550px) {
+  header {
+    height: 22.5vh;
+    padding: 0;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+
+  .logo {
+    width: 100px;
+    height: 60px;
+  }
+
+  nav {
+    width: 100%;
+    height: 100%;
+  }
+
+  nav ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    left: 40%;
+  }
+
+  nav ul li {
+    width: 100%;
+  }
+
+  nav ul li a {
+    font-size: 1.1rem;
+    padding: 2px 0;
+  }
+
+  section .btn {
+    top: 90%;
+  }
+
+  .btn.btn-voltar {
+    left: 40%;
+  }
+
+  .btn.btn-avancar {
+    right: 35%;
+  }
+}
