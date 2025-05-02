@@ -30,7 +30,13 @@ playBtn.addEventListener("click", () => {
   const slide = document.querySelector(".slide.selecionado");
   const title = slide.querySelector(".title").textContent;
   const descricao = slide.querySelector(".descricao").textContent;
+  const precos = slide.querySelector("#preco-filmes").textContent;
   const imgUrl = slide.querySelector("img").src;
-  const params = new URLSearchParams({ title, descricao, imagem: imgUrl });
+  const params = new URLSearchParams({
+    title,
+    descricao,
+    precos,
+    imagem: imgUrl,
+  });
   window.location.href = `filme.html?${params.toString()}`;
 });

@@ -5,6 +5,7 @@ body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 header {
@@ -77,6 +78,7 @@ section div img {
   background-size: cover;
   object-fit: fill;
   display: block;
+  overflow: hidden;
 }
 
 section .btn {
@@ -123,13 +125,23 @@ section .conteudo {
   position: absolute;
   top: 9.8%;
   left: 9%;
-  padding: 20px;
+  padding: 10px;
   width: 30vw;
   height: 90vh;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   align-items: center;
   justify-content: center;
+}
+
+section #preco-filmes {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #e65c5c;
+  background-color: rgba(33, 31, 31, 0.7);
+  padding: 8px 12px;
+  border-radius: 5px;
+  align-self: flex-start;
 }
