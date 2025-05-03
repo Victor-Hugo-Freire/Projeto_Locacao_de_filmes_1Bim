@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Secular+One&display=swap");
+
+body {
+  background-color: #111;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+header a {
+  width: 200px;
+  height: auto;
+}
+
+h1 {
+  font-size: 1.4rem;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+section.pagamento {
+  background-color: #222;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.forma-pagamento label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input[type="radio"] {
+  margin-right: 3px;
+}
+
+.detalhes-pagamento {
+  margin-top: 10px;
+  display: none;
+}
+
+.detalhes-pagamento input[type="text"],
+.detalhes-pagamento input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 7px;
+}
+
+#qrcode {
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+}
+
+.btn-confirmar {
+  background-color: #e65c5c;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-confirmar:hover {
+  background-color: #cc4a4a;
+}

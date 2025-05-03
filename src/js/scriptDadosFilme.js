@@ -8,3 +8,15 @@ document.getElementById("title-filme").textContent = title;
 document.getElementById("descricao-filme").textContent = desc;
 document.getElementById("preco-filmes").textContent = preco;
 document.getElementById("capa-filme").src = imgUrl;
+
+const btnPagemento = document.querySelector(".btn-pagamento");
+
+btnPagemento.addEventListener("click", () => {
+  const titleFilme = document.getElementById("title-filme").textContent;
+  const precoFilme = document.getElementById("preco-filmes").textContent;
+  const paramsFilme = new URLSearchParams({
+    titleFilme,
+    precoFilme,
+  });
+  window.location.href = `pagamento.html?${paramsFilme.toString()}`;
+});

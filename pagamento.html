@@ -1,12 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./src/css/reset.css" />
     <link rel="shortcut icon" href="./src/imgs/logo.png" type="image/x-icon" />
-    <link rel="stylesheet" href="./src/css/stylePagamento.css"">
-    <title>VH FLIX</title>
+    <link rel="stylesheet" href="./src/css/stylePagamento.css" />
+    <title>Pagamento - VH FLIX</title>
   </head>
-  <body></body>
+  <body>
+    <header>
+      <a href="./index.html">
+        <img src="./src/imgs/title.png" alt="Logo VH FLIX" />
+      </a>
+    </header>
+
+    <main>
+      <h1>Escolha o método de pagamento</h1>
+
+      <section class="pagamento">
+        <div id="informacoes-filme">
+          <h4 id="titulo-filme"></h4>
+          <p id="preco-filme">R$</p>
+        </div>
+        <form>
+          <div class="forma-pagamento">
+            <label
+              ><input type="radio" name="pagamento" value="pix" checked />
+              PIX</label
+            >
+            <label
+              ><input type="radio" name="pagamento" value="cartao" />
+              Cartão</label
+            >
+          </div>
+
+          <div class="detalhes-pagamento" id="pix-detalhes">
+            <p>Escaneie o QR Code abaixo para realizar o pagamento:</p>
+            <div id="qrcode">
+              <img src="./src/imgs/QrCodePix.jpeg" alt="QRCode" />
+            </div>
+          </div>
+
+          <div class="detalhes-pagamento" id="cartao-detalhes">
+            <label for="nome">Nome</label>
+            <input
+              type="text"
+              id="nome"
+              placeholder="Seu nome completo"
+              maxlength="40"
+              required
+            />
+
+            <label for="numero">Número do cartão</label>
+            <input
+              type="text"
+              id="numeroCar"
+              placeholder="XXXX XXXX XXXX XXXX"
+              required
+              minlength="13"
+              maxlength="20"
+            />
+
+            <label for="validade">Validade</label>
+            <input type="text" id="validade" placeholder="MM/AA" required />
+
+            <label for="cvv">CVV</label>
+            <input type="number" id="cvv" placeholder="123" required />
+          </div>
+
+          <button class="btn-confirmar">Confirmar Pagamento</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="./src/js/scriptDadosFilme.js"></script>
+    <script src="./src/js/scriptPagamento.js"></script>
+  </body>
 </html>
