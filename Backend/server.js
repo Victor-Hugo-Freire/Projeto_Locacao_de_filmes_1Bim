@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 const app = express();
 const port = 3001;
 
@@ -19,13 +20,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rota raiz para responder "Servidor funcionando"
-app.get("./Frontend", (req, res) => {
-  res.send("Servidor está funcionando! 🚀");
+// Caminho absoluto para a pasta do frontend
+const frontendPath = path.join(__dirname, "../Frontend");
+
+// Servir arquivos estáticos (HTML, CSS, JS, imagens)
+app.use(express.static(frontendPath));
+
+// Rota padrão para abrir index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-// Rotas login removidas, pois não há login no momento
-
 app.listen(port, () => {
-  console.log(`✅ Servidor rodando em http://localhost:${port}`);
+  console.log(`✅ Servidor rodando em: http://localhost:${port}`);
 });
