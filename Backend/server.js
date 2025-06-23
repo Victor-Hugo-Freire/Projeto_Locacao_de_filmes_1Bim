@@ -7,7 +7,6 @@ const port = 3001;
 app.use(express.json());
 app.use(cookieParser());
 
-// Middleware CORS simplificado
 app.use((req, res, next) => {
   const allowedOrigins = ["http://127.0.0.1:5500", "http://localhost:3000"];
   const origin = req.headers.origin;
@@ -20,15 +19,20 @@ app.use((req, res, next) => {
   next();
 });
 
-// Caminho absoluto para a pasta do frontend
 const frontendPath = path.join(__dirname, "../Frontend");
 
-// Servir arquivos estáticos (HTML, CSS, JS, imagens)
 app.use(express.static(frontendPath));
 
-// Rota padrão para abrir index.html
 app.get("/", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
+});
+
+const lerFilmesCSV = require("./lerCSV");
+
+app.get("/api/filmes", (req, res) => {
+  lerFilmesCSV((filmes) => {
+    res.json(filmes);
+  });
 });
 
 app.listen(port, () => {

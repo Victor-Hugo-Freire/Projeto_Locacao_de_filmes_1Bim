@@ -7,55 +7,20 @@ const slidesContainer = document.getElementById("slides-container");
 const tituloCategoria = document.getElementById("titulo-categoria");
 const navLinks = document.querySelectorAll(".nav-link");
 
-function dividirCSV(linha) {
-  const valores = [];
-  let atual = "";
-  let dentroDeAspas = false;
-
-  for (let i = 0; i < linha.length; i++) {
-    const char = linha[i];
-
-    if (char === '"' && linha[i + 1] === '"') {
-      atual += '"';
-      i++;
-    } else if (char === '"') {
-      dentroDeAspas = !dentroDeAspas;
-    } else if (char === "," && !dentroDeAspas) {
-      valores.push(atual);
-      atual = "";
-    } else {
-      atual += char;
-    }
-  }
-
-  valores.push(atual);
-  return valores;
-}
-
-function carregarCSV() {
-  fetch("CSVs/movies.csv")
-    .then((response) => response.text())
-    .then((data) => {
-      const linhas = data.trim().split("\n");
-      const cabecalho = linhas[0].split(",");
-
-      filmes = linhas.slice(1).map((linha) => {
-        const valores = dividirCSV(linha);
-        const filme = {};
-
-        cabecalho.forEach((coluna, i) => {
-          let valor = valores[i];
-
-          if (coluna === "preco") valor = parseFloat(valor);
-          filme[coluna.trim()] = valor.trim();
-        });
-
-        return filme;
-      });
+function carregarFilmesDoServidor() {
+  fetch("http://localhost:3001/api/filmes")
+    .then((res) => res.json())
+    .then((dados) => {
+      filmes = dados.map((filme) => ({
+        ...filme,
+        price: parseFloat(filme.price),
+      }));
 
       carregarCategoria("cinemas");
     })
-    .catch((erro) => console.error("Erro ao carregar CSV:", erro));
+    .catch((erro) => {
+      console.error("Erro ao carregar filmes do servidor:", erro);
+    });
 }
 
 function renderizarSlides() {
@@ -66,11 +31,11 @@ function renderizarSlides() {
     slide.className = `slide ${index === slideAtual ? "selecionado" : ""}`;
 
     slide.innerHTML = `
-      <img src="${filme.imagem}" alt="${filme.titulo}" />
+      <img src="${filme.image}" alt="${filme.movie_title}" />
       <div class="conteudo">
-        <h2 class="title">${filme.titulo}</h2>
-        <p class="descricao">${filme.descricao}</p>
-        <h3 class="preco-filmes">A partir de R$${filme.preco.toFixed(2)}</h3>
+        <h2 class="title">${filme.movie_title}</h2>
+        <p class="descricao">${filme.movie_description}</p>
+        <h3 class="preco-filmes">A partir de R$${filme.price.toFixed(2)}</h3>
       </div>
     `;
 
@@ -80,7 +45,7 @@ function renderizarSlides() {
 
 function carregarCategoria(categoria) {
   categoriaAtual = categoria;
-  filmesAtuais = filmes.filter((filme) => filme.categoria === categoria);
+  filmesAtuais = filmes.filter((filme) => filme.category === categoria);
   slideAtual = 0;
 
   tituloCategoria.textContent =
@@ -104,7 +69,7 @@ navLinks.forEach((link) => {
 });
 
 document.querySelector(".btn-voltar").addEventListener("click", () => {
-  slideAtual = slideAtual - 1;
+  slideAtual--;
   if (slideAtual < 0) {
     slideAtual = filmesAtuais.length - 1;
   }
@@ -112,7 +77,7 @@ document.querySelector(".btn-voltar").addEventListener("click", () => {
 });
 
 document.querySelector(".btn-avancar").addEventListener("click", () => {
-  slideAtual = slideAtual + 1;
+  slideAtual++;
   if (slideAtual > filmesAtuais.length - 1) {
     slideAtual = 0;
   }
@@ -123,15 +88,15 @@ document.querySelector(".btn-play").addEventListener("click", () => {
   const filmeSelecionado = filmesAtuais[slideAtual];
 
   const params = new URLSearchParams({
-    title: filmeSelecionado.titulo,
-    descricao: filmeSelecionado.descricao,
-    preco: filmeSelecionado.preco,
-    imagem: filmeSelecionado.imagem,
+    title: filme.movie_title,
+    descricao: filme.movie_description,
+    preco: filme.price,
+    imagem: filme.image,
   });
 
   window.location.href = `filme.html?${params.toString()}`;
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  carregarCSV();
+  carregarFilmesDoServidor();
 });

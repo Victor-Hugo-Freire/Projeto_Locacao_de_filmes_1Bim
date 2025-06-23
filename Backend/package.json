@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Victor-Hugo-Freire/Projeto_Locacao_de_filmes#readme",
   "dependencies": {
     "cookie-parser": "^1.4.7",
+    "csv-parser": "^3.2.0",
     "express": "^5.1.0"
   }
 }
