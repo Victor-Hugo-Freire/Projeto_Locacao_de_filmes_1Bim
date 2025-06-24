@@ -4,7 +4,6 @@ let filmesAtuais = [];
 let categoriaAtual = "cinemas";
 
 const slidesContainer = document.getElementById("slides-container");
-const tituloCategoria = document.getElementById("titulo-categoria");
 const navLinks = document.querySelectorAll(".nav-link");
 
 function carregarFilmesDoServidor() {
@@ -48,13 +47,6 @@ function carregarCategoria(categoria) {
   filmesAtuais = filmes.filter((filme) => filme.category === categoria);
   slideAtual = 0;
 
-  tituloCategoria.textContent =
-    categoria === "cinemas"
-      ? "Nos Cinemas"
-      : categoria === "lancamentos"
-      ? "Lançamentos"
-      : "Populares";
-
   navLinks.forEach((link) => {
     link.classList.toggle("ativado", link.dataset.categoria === categoria);
   });
@@ -94,7 +86,7 @@ document.querySelector(".btn-play").addEventListener("click", () => {
     imagem: filmeSelecionado.image,
   });
 
-  window.location.href = `filme.html?${params.toString()}`;
+  window.location.href = `./src/HTML/filme.html?${params.toString()}`;
 });
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -20,5 +20,5 @@ btnPagemento.addEventListener("click", () => {
     titleFilme,
     precoFilme,
   });
-  window.location.href = `pagamento.html?${paramsFilme.toString()}`;
+  window.location.href = `./pagamento.html?${paramsFilme.toString()}`;
 });

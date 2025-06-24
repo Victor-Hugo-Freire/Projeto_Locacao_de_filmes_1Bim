@@ -34,7 +34,7 @@ btnConfirmar.addEventListener("click", () => {
   if (soma % 10 !== 0) {
     alert("Número do cartão inválido!");
   } else {
-    window.location.href = "index.html";
+    window.location.href = "../../index.html";
   }
 });
 

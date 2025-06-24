@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@media (max-width: 990px) {
   body {
     overflow: hidden;
   }
@@ -26,6 +26,20 @@
 
   nav ul li a {
     font-size: 1.2rem;
+  }
+
+  .auth-buttons {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    margin-right: 0;
+    gap: 8px;
+  }
+
+  .auth-buttons button {
+    width: 120px;
+    padding: 6px 10px;
+    font-size: 0.9rem;
   }
 
   .conteudo .title {
