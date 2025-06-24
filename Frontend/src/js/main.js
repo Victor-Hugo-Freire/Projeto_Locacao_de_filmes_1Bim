@@ -88,10 +88,10 @@ document.querySelector(".btn-play").addEventListener("click", () => {
   const filmeSelecionado = filmesAtuais[slideAtual];
 
   const params = new URLSearchParams({
-    title: filme.movie_title,
-    descricao: filme.movie_description,
-    preco: filme.price,
-    imagem: filme.image,
+    title: filmeSelecionado.movie_title,
+    descricao: filmeSelecionado.movie_description,
+    preco: filmeSelecionado.price,
+    imagem: filmeSelecionado.image,
   });
 
   window.location.href = `filme.html?${params.toString()}`;
