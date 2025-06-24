@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="../imgs/logo.png" />
+    <link rel="stylesheet" href="../css/styleLogin.css" />
+    <title>Login - VH FLIX</title>
+  </head>
+  <body>
+    <main class="login-container">
+      <a href="/">
+        <img class="logo" src="../imgs/title.png" alt="Logo" />
+      </a>
+      <h1 id="titulo-pagina">Bem-vindo à VH FLIX</h1>
+
+      <!-- Formulário de Login -->
+      <form id="form-login" style="display: none">
+        <input type="email" id="email-login" placeholder="Email" required />
+        <input type="password" id="senha-login" placeholder="Senha" required />
+        <div class="login-buttons">
+          <button type="submit">Entrar</button>
+        </div>
+      </form>
+
+      <!-- Formulário de Cadastro -->
+      <form id="form-cadastro" style="display: none">
+        <input type="text" id="nome-cadastro" placeholder="Nome" required />
+        <input type="email" id="email-cadastro" placeholder="Email" required />
+        <input
+          type="password"
+          id="senha-cadastro"
+          placeholder="Senha"
+          required
+        />
+        <div class="login-buttons">
+          <button type="submit">Cadastrar</button>
+        </div>
+      </form>
+    </main>
+
+    <script src="../js/scriptLogin.js"></script>
+  </body>
+</html>

@@ -9,7 +9,8 @@ document.getElementById("descricao-filme").textContent = desc;
 document.getElementById("preco-filmes").textContent = `R$${parseFloat(
   preco
 ).toFixed(2)}`;
-document.getElementById("capa-filme").src = imgUrl;
+const caminhoCorrigido = imgUrl.replace("./src/", "../");
+document.getElementById("capa-filme").src = caminhoCorrigido;
 
 const btnPagemento = document.querySelector(".btn-pagamento");
 

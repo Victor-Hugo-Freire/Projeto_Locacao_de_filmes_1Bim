@@ -1,3 +1,4 @@
+// main.js atualizado
 let filmes = [];
 let slideAtual = 0;
 let filmesAtuais = [];
@@ -87,6 +88,14 @@ document.querySelector(".btn-play").addEventListener("click", () => {
   });
 
   window.location.href = `./src/HTML/filme.html?${params.toString()}`;
+});
+
+document.querySelector(".btn-login").addEventListener("click", () => {
+  window.location.href = "./src/HTML/login.html?modo=entrar";
+});
+
+document.querySelector(".btn-cadastrar").addEventListener("click", () => {
+  window.location.href = "./src/HTML/login.html?modo=cadastrar";
 });
 
 document.addEventListener("DOMContentLoaded", () => {
