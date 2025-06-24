@@ -16,8 +16,19 @@
 
       <!-- Formulário de Login -->
       <form id="form-login" style="display: none">
-        <input type="email" id="email-login" placeholder="Email" required />
-        <input type="password" id="senha-login" placeholder="Senha" required />
+        <input
+          type="text"
+          id="login-username"
+          placeholder="Nome de usuário"
+          required
+        />
+        <input
+          type="password"
+          id="login-password"
+          placeholder="Senha"
+          required
+        />
+
         <div class="login-buttons">
           <button type="submit">Entrar</button>
         </div>
@@ -25,14 +36,15 @@
 
       <!-- Formulário de Cadastro -->
       <form id="form-cadastro" style="display: none">
-        <input type="text" id="nome-cadastro" placeholder="Nome" required />
-        <input type="email" id="email-cadastro" placeholder="Email" required />
         <input
-          type="password"
-          id="senha-cadastro"
-          placeholder="Senha"
+          type="text"
+          id="cad-username"
+          placeholder="Nome de usuário"
           required
         />
+        <input type="email" id="cad-email" placeholder="Email" required />
+        <input type="password" id="cad-password" placeholder="Senha" required />
+
         <div class="login-buttons">
           <button type="submit">Cadastrar</button>
         </div>

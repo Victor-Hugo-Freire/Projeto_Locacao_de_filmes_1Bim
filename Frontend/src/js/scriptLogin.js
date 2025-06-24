@@ -5,7 +5,7 @@ const formLogin = document.getElementById("form-login");
 const formCadastro = document.getElementById("form-cadastro");
 const titulo = document.getElementById("titulo-pagina");
 
-// Mostra o formulário de acordo com o modo
+// Mostrar formulário conforme o modo
 if (modo === "entrar") {
   formLogin.style.display = "block";
   titulo.textContent = "Faça login";
@@ -16,28 +16,41 @@ if (modo === "entrar") {
   titulo.textContent = "Modo inválido!";
 }
 
-// Evento de login
+// === LOGIN ===
 formLogin?.addEventListener("submit", (e) => {
   e.preventDefault();
-  const email = document.getElementById("email-login").value.trim();
-  const senha = document.getElementById("senha-login").value.trim();
 
-  if (email === "teste@email.com" && senha === "1234") {
-    localStorage.setItem("usuarioLogado", "true");
+  const username = document.getElementById("login-username").value.trim();
+  const user_password = document.getElementById("login-password").value.trim();
+
+  if (
+    (username === "vhfr" && user_password === "userVH456") ||
+    (username === "VH" && user_password === "superUserVH456")
+  ) {
+    localStorage.setItem("usuarioLogado", username);
     alert("Login realizado com sucesso!");
     window.location.href = "../../index.html";
   } else {
-    alert("Email ou senha incorretos!");
+    alert("Usuário ou senha inválidos!");
   }
 });
 
 formCadastro?.addEventListener("submit", (e) => {
   e.preventDefault();
-  const nome = document.getElementById("nome-cadastro").value.trim();
-  const email = document.getElementById("email-cadastro").value.trim();
-  const senha = document.getElementById("senha-cadastro").value.trim();
 
-  console.log("Usuário cadastrado:", { nome, email, senha });
+  const username = document.getElementById("cad-username").value.trim();
+  const user_email = document.getElementById("cad-email").value.trim();
+  const user_password = document.getElementById("cad-password").value.trim();
+  const user_role = "user"; // padrão
+
+  // Simulação: isso será enviado ao backend depois
+  console.log("Novo cadastro:", {
+    username,
+    user_password,
+    user_email,
+    user_role,
+  });
+
   alert("Cadastro realizado com sucesso!");
   window.location.href = "../../index.html";
 });
