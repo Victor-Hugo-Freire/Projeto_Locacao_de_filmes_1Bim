@@ -7,7 +7,7 @@ function lerUsuariosCSV(callback) {
   const caminho = path.join(__dirname, "./Dados", "users.csv");
 
   fs.createReadStream(caminho)
-    .pipe(csv())
+    .pipe(csv({ trim: true }))
     .on("data", (linha) => resultados.push(linha))
     .on("end", () => callback(resultados));
 }

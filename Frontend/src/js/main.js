@@ -1,4 +1,3 @@
-// main.js atualizado
 let filmes = [];
 let slideAtual = 0;
 let filmesAtuais = [];
@@ -15,7 +14,6 @@ function carregarFilmesDoServidor() {
         ...filme,
         price: parseFloat(filme.price),
       }));
-
       carregarCategoria("cinemas");
     })
     .catch((erro) => {
@@ -62,18 +60,12 @@ navLinks.forEach((link) => {
 });
 
 document.querySelector(".btn-voltar").addEventListener("click", () => {
-  slideAtual--;
-  if (slideAtual < 0) {
-    slideAtual = filmesAtuais.length - 1;
-  }
+  slideAtual = (slideAtual - 1 + filmesAtuais.length) % filmesAtuais.length;
   renderizarSlides();
 });
 
 document.querySelector(".btn-avancar").addEventListener("click", () => {
-  slideAtual++;
-  if (slideAtual > filmesAtuais.length - 1) {
-    slideAtual = 0;
-  }
+  slideAtual = (slideAtual + 1) % filmesAtuais.length;
   renderizarSlides();
 });
 
@@ -98,41 +90,76 @@ document.querySelector(".btn-cadastrar").addEventListener("click", () => {
   window.location.href = "./src/HTML/login.html?modo=cadastrar";
 });
 
+function verificarLogin() {
+  return fetch("http://localhost:3001/api/usuario-logado", {
+    credentials: "include",
+  }).then((res) => {
+    if (!res.ok) throw new Error("Usuário não logado");
+    return res.json();
+  });
+}
+
+function fazerLogout() {
+  return fetch("http://localhost:3001/api/logout", {
+    method: "POST",
+    credentials: "include",
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   carregarFilmesDoServidor();
 
   const btnLogin = document.querySelector(".btn-login");
   const btnCadastrar = document.querySelector(".btn-cadastrar");
-  const btnLogout = document.querySelector(".btn-logout");
+  const userMenuContainer = document.querySelector(".user-menu-container");
+  const userIcon = document.querySelector(".user-icon");
   const nomeUsuarioSpan = document.querySelector(".nome-usuario");
+  const userEmailSpan = document.querySelector(".user-email");
+  const dropdownLogoutBtn = document.querySelector(".logout-btn");
+  const btnAdm = document.querySelector(".btn-adm");
 
-  // Verifica cookie
-  fetch("http://localhost:3001/api/usuario-logado", {
-    credentials: "include",
-  })
-    .then((res) => res.json())
+  btnAdm.addEventListener("click", () => {
+    window.location.href = "./src/HTML/adm.html";
+  });
+
+  verificarLogin()
     .then((dados) => {
-      if (dados.nome) {
-        btnLogin.style.display = "none";
-        btnCadastrar.style.display = "none";
-        btnLogout.style.display = "inline-block";
-        nomeUsuarioSpan.textContent = dados.nome;
-        nomeUsuarioSpan.style.display = "inline";
-      } else {
-        throw new Error("Usuário não logado");
+      btnLogin.style.display = "none";
+      btnCadastrar.style.display = "none";
+      userMenuContainer.style.display = "flex";
+      nomeUsuarioSpan.textContent = dados.nome;
+      userEmailSpan.textContent = dados.email;
+
+      // Mostrar botão ADM se for admin
+      if (dados.cargo === "ADM") {
+        btnAdm.style.display = "inline-block";
       }
     })
     .catch(() => {
       btnLogin.style.display = "inline-block";
       btnCadastrar.style.display = "inline-block";
-      btnLogout.style.display = "none";
-      nomeUsuarioSpan.style.display = "none";
+      userMenuContainer.style.display = "none";
+      btnAdm.style.display = "none";
     });
 
-  btnLogout.addEventListener("click", () => {
-    fetch("http://localhost:3001/api/logout", {
-      method: "POST",
-      credentials: "include",
-    }).then(() => window.location.reload());
+  userIcon.addEventListener("click", (e) => {
+    e.stopPropagation();
+    userMenuContainer.classList.toggle("active");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!userMenuContainer.contains(e.target)) {
+      userMenuContainer.classList.remove("active");
+    }
+  });
+
+  dropdownLogoutBtn.addEventListener("click", () => {
+    fazerLogout().then(() => window.location.reload());
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      userMenuContainer.classList.remove("active");
+    }
   });
 });

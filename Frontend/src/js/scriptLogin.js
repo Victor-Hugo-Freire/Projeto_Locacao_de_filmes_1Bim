@@ -18,21 +18,32 @@ if (modo === "entrar") {
 
 formLogin.addEventListener("submit", (e) => {
   e.preventDefault();
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
+  const username = document.getElementById("login-username").value;
+  const senha = document.getElementById("login-password").value;
 
   fetch("http://localhost:3001/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include", // Importante para cookies
-    body: JSON.stringify({ email, senha }),
+    body: JSON.stringify({ username, senha }),
   })
     .then((res) => {
       if (!res.ok) throw new Error("Falha no login");
       return res.json();
     })
     .then(() => {
-      window.location.href = "/"; // Redireciona ao home
+      // Buscar usuário logado após login
+      return fetch("http://localhost:3001/api/usuario-logado", {
+        credentials: "include",
+      });
+    })
+    .then((res) => res.json())
+    .then((usuario) => {
+      if (usuario.cargo === "ADM") {
+        window.location.href = "./adm.html";
+      } else {
+        window.location.href = "../../index.html";
+      }
     })
     .catch((err) => alert("Erro no login: " + err.message));
 });

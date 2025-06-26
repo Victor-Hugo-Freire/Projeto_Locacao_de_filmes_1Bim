@@ -36,15 +36,18 @@ app.get("/api/filmes", (req, res) => {
 });
 
 app.post("/api/login", (req, res) => {
-  const { email, senha } = req.body;
+  const { username, senha } = req.body;
+
+  console.log("🔐 Tentativa de login:", username, senha); // DEBUG
 
   lerUsuariosCSV((usuarios) => {
     const usuario = usuarios.find(
-      (u) => u.user_email === email && u.password === senha
+      (u) =>
+        (u.user_email === username || u.username === username) &&
+        u.user_password === senha // <- Aqui está o fix
     );
 
     if (usuario) {
-      // Define cookie com nome e tipo
       res.cookie(
         "usuario",
         {
@@ -53,10 +56,11 @@ app.post("/api/login", (req, res) => {
           cargo: usuario.user_role,
         },
         { httpOnly: false, sameSite: "Lax" }
-      ); // httpOnly: false para JS poder ler
+      );
 
       res.json({ sucesso: true });
     } else {
+      console.log("🚫 Login falhou. Nenhum usuário encontrado.");
       res.status(401).json({ erro: "Credenciais inválidas" });
     }
   });
