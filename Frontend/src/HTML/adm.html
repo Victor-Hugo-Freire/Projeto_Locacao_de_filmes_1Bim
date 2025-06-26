@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/styleAdm.css" />
+    <link rel="shortcut icon" href="../imgs/logo.png" type="image/x-icon" />
+    <title>Painel ADM - VH FLIX</title>
+  </head>
+  <body>
+    <header>
+      <h1>Painel Administrativo</h1>
+      <div>
+        <a href="../../index.html"
+          ><img src="../imgs/title.png" alt="Logo"
+        /></a>
+      </div>
+      <div class="modo-selecao">
+        <label>
+          <input type="radio" name="modo" value="filmes" checked /> Gerenciar
+          Filmes
+        </label>
+        <label>
+          <input type="radio" name="modo" value="usuarios" /> Gerenciar Usuários
+        </label>
+      </div>
+    </header>
+
+    <main>
+      <!-- Seção para filmes -->
+      <section id="secao-filmes">
+        <h2>Adicionar/Atualizar Filme</h2>
+        <form id="form-filme">
+          <input
+            type="text"
+            id="titulo-filme"
+            placeholder="Título do filme"
+            required
+          />
+          <input
+            type="text"
+            id="descricao-filme"
+            placeholder="Descrição"
+            required
+          />
+          <input
+            type="number"
+            id="preco-filme"
+            placeholder="Preço"
+            required
+            step="0.01"
+          />
+          <input
+            type="text"
+            id="imagem-filme"
+            placeholder="Caminho da imagem"
+            required
+          />
+          <select id="categoria-filme" required>
+            <option value="cinemas">Cinemas</option>
+            <option value="lancamentos">Lançamentos</option>
+            <option value="populares">Populares</option>
+          </select>
+          <button type="submit">Salvar Filme</button>
+        </form>
+
+        <h3>Lista de Filmes</h3>
+        <table id="tabela-filmes">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Descrição</th>
+              <th>Preço</th>
+              <th>Imagem</th>
+              <th>Categoria</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- Seção para usuários -->
+      <section id="secao-usuarios" style="display: none">
+        <h2>Usuários Registrados</h2>
+        <table id="tabela-usuarios">
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>Email</th>
+              <th>Cargo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="../js/scriptAdm.js"></script>
+  </body>
+</html>

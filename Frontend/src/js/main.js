@@ -101,29 +101,38 @@ document.querySelector(".btn-cadastrar").addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
   carregarFilmesDoServidor();
 
-  // Verifica se usuário está logado
-  const usuarioLogado = localStorage.getItem("usuarioLogado");
   const btnLogin = document.querySelector(".btn-login");
   const btnCadastrar = document.querySelector(".btn-cadastrar");
   const btnLogout = document.querySelector(".btn-logout");
+  const nomeUsuarioSpan = document.querySelector(".nome-usuario");
 
-  if (usuarioLogado) {
-    // Usuário logado: esconde login/cadastrar e mostra logout
-    btnLogin.style.display = "none";
-    btnCadastrar.style.display = "none";
-    btnLogout.style.display = "inline-block"; // ou block, dependendo do estilo
-  } else {
-    // Usuário não está logado: mostra login/cadastrar e esconde logout
-    btnLogin.style.display = "inline-block";
-    btnCadastrar.style.display = "inline-block";
-    btnLogout.style.display = "none";
-  }
+  // Verifica cookie
+  fetch("http://localhost:3001/api/usuario-logado", {
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((dados) => {
+      if (dados.nome) {
+        btnLogin.style.display = "none";
+        btnCadastrar.style.display = "none";
+        btnLogout.style.display = "inline-block";
+        nomeUsuarioSpan.textContent = dados.nome;
+        nomeUsuarioSpan.style.display = "inline";
+      } else {
+        throw new Error("Usuário não logado");
+      }
+    })
+    .catch(() => {
+      btnLogin.style.display = "inline-block";
+      btnCadastrar.style.display = "inline-block";
+      btnLogout.style.display = "none";
+      nomeUsuarioSpan.style.display = "none";
+    });
 
-  // Adiciona evento para botão de logout
   btnLogout.addEventListener("click", () => {
-    localStorage.removeItem("usuarioLogado");
-    alert("Você saiu com sucesso!");
-    // Recarrega a página para atualizar o estado
-    window.location.reload();
+    fetch("http://localhost:3001/api/logout", {
+      method: "POST",
+      credentials: "include",
+    }).then(() => window.location.reload());
   });
 });

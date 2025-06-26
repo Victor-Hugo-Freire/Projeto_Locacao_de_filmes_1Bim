@@ -1,0 +1,94 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #121212;
+  color: #fff;
+}
+
+header {
+  padding: 20px;
+  background-color: #1f1f1f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.radio-section {
+  display: flex;
+  gap: 15px;
+  margin: 20px;
+}
+
+.radio-section label {
+  font-weight: bold;
+}
+
+main {
+  padding: 20px;
+}
+
+.form-section,
+.table-section {
+  margin-bottom: 40px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+button {
+  background: linear-gradient(to right, #8b0000, #a30000);
+  border: none;
+  padding: 10px 15px;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: linear-gradient(to right, #a30000, #ff0000);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1e1e1e;
+}
+
+th,
+td {
+  padding: 12px;
+  border: 1px solid #444;
+  text-align: left;
+}
+
+th {
+  background-color: #2b2b2b;
+}
+
+.action-buttons button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+}
+
+.hidden {
+  display: none;
+}

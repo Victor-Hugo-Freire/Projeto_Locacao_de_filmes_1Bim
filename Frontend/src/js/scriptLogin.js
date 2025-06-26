@@ -16,23 +16,25 @@ if (modo === "entrar") {
   titulo.textContent = "Modo inválido!";
 }
 
-// === LOGIN ===
-formLogin?.addEventListener("submit", (e) => {
+formLogin.addEventListener("submit", (e) => {
   e.preventDefault();
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
 
-  const username = document.getElementById("login-username").value.trim();
-  const user_password = document.getElementById("login-password").value.trim();
-
-  if (
-    (username === "vhfr" && user_password === "userVH456") ||
-    (username === "VH" && user_password === "superUserVH456")
-  ) {
-    localStorage.setItem("usuarioLogado", username);
-    alert("Login realizado com sucesso!");
-    window.location.href = "../../index.html";
-  } else {
-    alert("Usuário ou senha inválidos!");
-  }
+  fetch("http://localhost:3001/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include", // Importante para cookies
+    body: JSON.stringify({ email, senha }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Falha no login");
+      return res.json();
+    })
+    .then(() => {
+      window.location.href = "/"; // Redireciona ao home
+    })
+    .catch((err) => alert("Erro no login: " + err.message));
 });
 
 formCadastro?.addEventListener("submit", (e) => {
