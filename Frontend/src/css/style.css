@@ -169,72 +169,10 @@ section #preco-filmes {
   align-self: flex-start;
 }
 
-/* User Menu Styles - Corrigido */
-.user-menu-container {
-  position: relative;
-  margin-left: 15px;
-  display: none;
-  align-items: center; /* Adicionado para alinhar verticalmente */
-}
-
-.user-icon {
-  background: none;
-  border: none;
+.user-nome {
+  font-size: 1rem;
   color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 8px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  margin: 0; /* Remover margens padrão */
-}
-
-.user-icon:hover {
-  background-color: rgba(230, 92, 92, 0.3);
-  transform: scale(1.1);
-}
-
-.user-dropdown {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 10px); /* Ajuste para posicionar abaixo do ícone */
-  background-color: rgb(40, 38, 38);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  padding: 15px;
-  width: 250px;
-  z-index: 1000;
-  display: none;
-  animation: fadeIn 0.3s ease-out;
-}
-
-.user-menu-container.active .user-dropdown {
-  display: block;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.nome-usuario {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #fff;
-}
-
-.user-email {
-  font-size: 0.9rem;
-  color: #ccc;
+  margin-right: 10px;
 }
 
 .logout-btn {
@@ -249,25 +187,56 @@ section #preco-filmes {
   font-weight: 500;
 }
 
-.logout-btn:hover {
-  background-color: #c84444;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Adicionar esta regra para alinhar os botões corretamente */
 .auth-buttons {
   display: flex;
   gap: 10px;
   margin-right: 20px;
-  align-items: center; /* Isso vai alinhar verticalmente todos os itens */
+  align-items: center;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 20px;
+}
+
+.auth-buttons .user-nome {
+  font-size: 1rem;
+  color: white;
+  font-weight: 500;
+  margin-right: 5px;
+  white-space: nowrap;
+}
+
+.auth-buttons button {
+  padding: 8px 15px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background-color: #e65c5c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.auth-buttons .btn-adm {
+  background-color: #ff5c5c;
+  color: white;
+}
+
+.auth-buttons .btn-adm:hover {
+  background-color: #d94545;
+}
+
+.logout-btn {
+  width: auto;
+  padding: 8px 15px;
+  background-color: #e65c5c;
+}
+
+.logout-btn:hover {
+  background-color: #c84444;
 }

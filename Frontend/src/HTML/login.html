@@ -23,16 +23,31 @@
           placeholder="Nome de usuário"
           required
         />
-        <input
-          type="password"
-          id="login-password"
-          placeholder="Senha"
-          required
-        />
+        <div class="senha-container">
+          <input
+            type="password"
+            id="login-password"
+            placeholder="Senha"
+            required
+          />
+          <button
+            type="button"
+            class="toggle-senha"
+            data-input="login-password"
+          >
+            👁️
+          </button>
+        </div>
 
         <div class="login-buttons">
-          <button type="submit">Entrar</button>
+          <button class="btn-login" type="submit">Entrar</button>
         </div>
+        <p style="text-align: center; margin-top: 10px">
+          Não tem uma conta?
+          <a href="login.html?modo=cadastrar" style="color: #e65c5c"
+            >Cadastre-se</a
+          >
+        </p>
       </form>
 
       <!-- Formulário de Cadastro -->
@@ -44,11 +59,25 @@
           required
         />
         <input type="email" id="cad-email" placeholder="Email" required />
-        <input type="password" id="cad-password" placeholder="Senha" required />
+        <div class="senha-container">
+          <input
+            type="password"
+            id="cad-password"
+            placeholder="Senha"
+            required
+          />
+          <button type="button" class="toggle-senha" data-input="cad-password">
+            👁️
+          </button>
+        </div>
 
         <div class="login-buttons">
           <button type="submit">Cadastrar</button>
         </div>
+        <p style="text-align: center; margin-top: 10px">
+          Já tem uma conta?
+          <a href="login.html?modo=entrar" style="color: #e65c5c">Entrar</a>
+        </p>
       </form>
     </main>
 

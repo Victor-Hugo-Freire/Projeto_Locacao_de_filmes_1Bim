@@ -29,7 +29,7 @@ main {
 .imagem-filme img {
   width: 100vw;
   height: 85vh;
-  object-fit: fill;
+  object-fit: cover;
   border-radius: 10px;
 }
 

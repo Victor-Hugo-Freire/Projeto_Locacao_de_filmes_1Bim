@@ -31,7 +31,7 @@ h1 {
 }
 
 input {
-  width: 94%;
+  width: 99%;
   padding: 10px;
   margin: 10px 0;
   border: none;
@@ -56,6 +56,27 @@ button {
   transition: 0.3s;
 }
 
-button:hover {
+.btn-login:hover {
   background: linear-gradient(to right, #a00000, #ff3333);
+}
+
+.senha-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.senha-container input {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.toggle-senha {
+  position: absolute;
+  right: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #666;
 }

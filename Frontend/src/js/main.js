@@ -111,26 +111,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const btnLogin = document.querySelector(".btn-login");
   const btnCadastrar = document.querySelector(".btn-cadastrar");
-  const userMenuContainer = document.querySelector(".user-menu-container");
-  const userIcon = document.querySelector(".user-icon");
-  const nomeUsuarioSpan = document.querySelector(".nome-usuario");
-  const userEmailSpan = document.querySelector(".user-email");
-  const dropdownLogoutBtn = document.querySelector(".logout-btn");
   const btnAdm = document.querySelector(".btn-adm");
+  const logoutBtn = document.querySelector(".logout-btn");
+  const spanUsuario = document.querySelector(".user-nome");
 
   btnAdm.addEventListener("click", () => {
     window.location.href = "./src/HTML/adm.html";
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    fazerLogout().then(() => window.location.reload());
   });
 
   verificarLogin()
     .then((dados) => {
       btnLogin.style.display = "none";
       btnCadastrar.style.display = "none";
-      userMenuContainer.style.display = "flex";
-      nomeUsuarioSpan.textContent = dados.nome;
-      userEmailSpan.textContent = dados.email;
+      logoutBtn.style.display = "inline-block";
+      spanUsuario.style.display = "inline-block";
+      spanUsuario.textContent = `👤 ${dados.nome}`;
 
-      // Mostrar botão ADM se for admin
       if (dados.cargo === "ADM") {
         btnAdm.style.display = "inline-block";
       }
@@ -138,28 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(() => {
       btnLogin.style.display = "inline-block";
       btnCadastrar.style.display = "inline-block";
-      userMenuContainer.style.display = "none";
+      logoutBtn.style.display = "none";
+      spanUsuario.style.display = "none";
       btnAdm.style.display = "none";
     });
-
-  userIcon.addEventListener("click", (e) => {
-    e.stopPropagation();
-    userMenuContainer.classList.toggle("active");
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!userMenuContainer.contains(e.target)) {
-      userMenuContainer.classList.remove("active");
-    }
-  });
-
-  dropdownLogoutBtn.addEventListener("click", () => {
-    fazerLogout().then(() => window.location.reload());
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      userMenuContainer.classList.remove("active");
-    }
-  });
 });
