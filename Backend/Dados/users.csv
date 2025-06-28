@@ -1,3 +1,4 @@
 username,user_password,user_email,user_role
 "vhfr","userVH456","vh.user@gmail.com","user"
 "VH","superUserVH456","vh.adm@gmail.com","ADM"
+"VH33","$2b$12$mjIAkgLZiZhAd/ACq8hO5uTsmaYQ/z0hrbhexOyMrVSsSA34imW62","vhfr7@gmail.com","user"

@@ -2,9 +2,11 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const fs = require("fs");
+const bcrypt = require("bcrypt");
 
 const app = express();
 const port = 3001;
+const saltRounds = 12;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -42,12 +44,15 @@ app.post("/api/login", (req, res) => {
 
   lerUsuariosCSV((usuarios) => {
     const usuario = usuarios.find(
-      (u) =>
-        (u.user_email === username || u.username === username) &&
-        u.user_password === senha
+      (u) => u.user_email === username || u.username === username
     );
 
-    if (usuario) {
+    if (!usuario) {
+      return res.status(401).json({ erro: "Usuário não encontrado" });
+    }
+
+    // Temporariamente: comparação direta (será ajustada no passo 3)
+    if (usuario.user_password === senha) {
       res.cookie(
         "usuario",
         {
@@ -57,9 +62,9 @@ app.post("/api/login", (req, res) => {
         },
         { httpOnly: false, sameSite: "Lax" }
       );
-      res.json({ sucesso: true });
+      return res.json({ sucesso: true });
     } else {
-      res.status(401).json({ erro: "Credenciais inválidas" });
+      return res.status(401).json({ erro: "Senha incorreta" });
     }
   });
 });
@@ -115,17 +120,25 @@ app.post("/api/cadastrar", (req, res) => {
       return res.status(400).json({ erro: "E-mail já cadastrado" });
     }
 
-    const novaLinhaBruta = `"${username}","${user_password}","${user_email}","${user_role}"\n`;
-    const novaLinha = data.endsWith("\n")
-      ? novaLinhaBruta
-      : `\n${novaLinhaBruta}`;
-
-    fs.appendFile(caminho, novaLinha, (err) => {
+    // Criptografar senha
+    bcrypt.hash(user_password, saltRounds, (err, hash) => {
       if (err) {
-        console.error("Erro ao salvar no CSV:", err);
-        return res.status(500).json({ erro: "Erro ao cadastrar usuário" });
+        console.error("Erro ao gerar hash:", err);
+        return res.status(500).json({ erro: "Erro ao processar senha" });
       }
-      res.json({ sucesso: true });
+
+      const novaLinhaBruta = `"${username}","${hash}","${user_email}","${user_role}"\n`;
+      const novaLinha = data.endsWith("\n")
+        ? novaLinhaBruta
+        : `\n${novaLinhaBruta}`;
+
+      fs.appendFile(caminho, novaLinha, (err) => {
+        if (err) {
+          console.error("Erro ao salvar no CSV:", err);
+          return res.status(500).json({ erro: "Erro ao cadastrar usuário" });
+        }
+        res.json({ sucesso: true });
+      });
     });
   });
 });
