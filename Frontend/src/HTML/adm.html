@@ -10,11 +10,14 @@
   </head>
   <body>
     <header>
-      <h1>Painel Administrativo</h1>
       <div>
-        <a href="../../index.html"
-          ><img src="../imgs/title.png" alt="Logo"
-        /></a>
+        <h1>Painel Administrativo</h1>
+        <p id="nome-admin">Carregando usuário...</p>
+      </div>
+      <div>
+        <a href="../../index.html">
+          <img src="../imgs/title.png" alt="Logo" />
+        </a>
       </div>
       <div class="modo-selecao">
         <label>
@@ -98,6 +101,10 @@
       </section>
     </main>
 
+    <script src="../js/auth.js"></script>
+    <script>
+      verificarLogin(true);
+    </script>
     <script src="../js/scriptAdm.js"></script>
   </body>
 </html>

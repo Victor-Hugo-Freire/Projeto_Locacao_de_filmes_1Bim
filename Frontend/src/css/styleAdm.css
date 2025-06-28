@@ -19,6 +19,12 @@ header h1 {
   font-size: 24px;
 }
 
+p #nome-admin {
+  font-size: 14px;
+  color: #fff;
+  margin: 4px 0 0;
+}
+
 .radio-section {
   display: flex;
   gap: 15px;

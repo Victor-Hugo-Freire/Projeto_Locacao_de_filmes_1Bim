@@ -1,4 +1,4 @@
-function verificarLogin() {
+function verificarLogin(exigirAdm = false) {
   fetch("http://localhost:3001/api/usuario-logado", {
     credentials: "include",
   })
@@ -6,8 +6,17 @@ function verificarLogin() {
       if (!res.ok) throw new Error("Não autenticado");
       return res.json();
     })
-    .catch(() => {
-      // Redireciona para login se não estiver logado
+    .then((usuario) => {
+      if (exigirAdm && usuario.cargo !== "ADM") {
+        throw new Error("Acesso restrito");
+      }
+    })
+    .catch((err) => {
+      alert(
+        err.message === "Acesso restrito"
+          ? "Você precisa ser um administrador para acessar esta página."
+          : "Você precisa estar logado."
+      );
       window.location.href = "./login.html?modo=entrar";
     });
 }

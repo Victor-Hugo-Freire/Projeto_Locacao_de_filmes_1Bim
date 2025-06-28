@@ -1,5 +1,3 @@
-// scriptAdm.js
-
 const tabelaFilmes = document.querySelector("#tabela-filmes tbody");
 const tabelaUsuarios = document.querySelector("#tabela-usuarios tbody");
 const secaoFilmes = document.getElementById("secao-filmes");
@@ -57,11 +55,7 @@ function carregarUsuarios() {
 function preencherTabelaUsuarios(usuarios) {
   tabelaUsuarios.innerHTML = "";
   usuarios.forEach((usuario, index) => {
-    if (usuario.user_role === "ADM")
-      return `
-        <td>${usuario.username}</td>
-      <td>${usuario.user_email}</td>
-      <td>${usuario.user_role}</td>`;
+    if (usuario.user_role === "ADM") return;
     const linha = document.createElement("tr");
     linha.innerHTML = `
       <td>${usuario.username}</td>
@@ -76,11 +70,30 @@ function preencherTabelaUsuarios(usuarios) {
   });
 }
 
+// Mostrar nome do admin logado
+fetch("http://localhost:3001/api/usuario-logado", {
+  credentials: "include",
+})
+  .then((res) => res.json())
+  .then((usuario) => {
+    const nomeAdm = document.getElementById("nome-admin");
+    if (usuario?.nome) {
+      nomeAdm.textContent = `Logado como: ${usuario.nome}`;
+    } else {
+      nomeAdm.textContent = "Administrador não identificado.";
+    }
+  })
+  .catch(() => {
+    const nomeAdm = document.getElementById("nome-admin");
+    nomeAdm.textContent = "Erro ao obter informações do usuário.";
+  });
+
 // Inicialização
 window.addEventListener("DOMContentLoaded", () => {
   const modoSelecionado = document.querySelector(
     'input[name="modo"]:checked'
   ).value;
+
   if (modoSelecionado === "filmes") {
     secaoFilmes.style.display = "block";
     secaoUsuarios.style.display = "none";
