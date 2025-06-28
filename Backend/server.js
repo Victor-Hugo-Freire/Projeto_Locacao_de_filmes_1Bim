@@ -51,21 +51,29 @@ app.post("/api/login", (req, res) => {
       return res.status(401).json({ erro: "Usuário não encontrado" });
     }
 
-    // Temporariamente: comparação direta (será ajustada no passo 3)
-    if (usuario.user_password === senha) {
-      res.cookie(
-        "usuario",
-        {
-          nome: usuario.username,
-          email: usuario.user_email,
-          cargo: usuario.user_role,
-        },
-        { httpOnly: false, sameSite: "Lax" }
-      );
-      return res.json({ sucesso: true });
-    } else {
-      return res.status(401).json({ erro: "Senha incorreta" });
-    }
+    bcrypt.compare(senha, usuario.user_password, (err, resultado) => {
+      if (err) {
+        console.error("Erro ao comparar senhas:", err);
+        return res.status(500).json({ erro: "Erro no servidor" });
+      }
+
+      if (resultado) {
+        // Senha correta
+        res.cookie(
+          "usuario",
+          {
+            nome: usuario.username,
+            email: usuario.user_email,
+            cargo: usuario.user_role,
+          },
+          { httpOnly: false, sameSite: "Lax" }
+        );
+        res.json({ sucesso: true });
+      } else {
+        // Senha incorreta
+        res.status(401).json({ erro: "Senha incorreta" });
+      }
+    });
   });
 });
 

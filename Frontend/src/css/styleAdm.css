@@ -39,21 +39,42 @@ main {
   padding: 20px;
 }
 
+/* Estilo para formulário de adicionar usuário */
+#form-usuario {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+#form-usuario input,
+#form-usuario select,
+#form-usuario button .btn-addUser {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #2a2a2a;
+  color: #fff;
+  font-size: 1rem;
+}
+
 .form-section,
 .table-section {
   margin-bottom: 40px;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="email"] {
+#form-filme input,
+#form-filme select,
+#form-filme button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 10px;
   border: none;
   border-radius: 4px;
   background-color: #2a2a2a;
   color: #fff;
+  font-size: 1rem;
 }
 
 button {
@@ -97,4 +118,26 @@ th {
 
 .hidden {
   display: none;
+}
+
+.campo-senha {
+  position: relative;
+  width: 100%;
+}
+
+.campo-senha input {
+  width: 100%;
+  padding-right: 40px; /* espaço pro botão */
+}
+
+.campo-senha .toggle-senha {
+  position: absolute;
+  right: 10px;
+  top: 25%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2em;
+  cursor: pointer;
 }

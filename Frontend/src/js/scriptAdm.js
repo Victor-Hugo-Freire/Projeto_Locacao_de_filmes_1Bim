@@ -54,18 +54,27 @@ function carregarUsuarios() {
 
 function preencherTabelaUsuarios(usuarios) {
   tabelaUsuarios.innerHTML = "";
-  usuarios.forEach((usuario, index) => {
-    if (usuario.user_role === "ADM") return;
+  usuarios.forEach((usuario) => {
     const linha = document.createElement("tr");
+    const isADM = usuario.user_role === "ADM";
+
     linha.innerHTML = `
       <td>${usuario.username}</td>
       <td>${usuario.user_email}</td>
       <td>${usuario.user_role}</td>
+      <td style="font-size: 0.8em">${usuario.user_password}</td>
       <td>
-        <button onclick="promoverUsuario('${usuario.username}')">Promover</button>
-        <button onclick="excluirUsuario('${usuario.username}')">Excluir</button>
+        ${
+          isADM
+            ? `<span style="color: gray; font-size: 0.9em;">(ADM)</span>`
+            : `
+          <button onclick="promoverUsuario('${usuario.username}')">Promover</button>
+          <button onclick="excluirUsuario('${usuario.username}')">Excluir</button>
+        `
+        }
       </td>
     `;
+
     tabelaUsuarios.appendChild(linha);
   });
 }
@@ -88,7 +97,6 @@ fetch("http://localhost:3001/api/usuario-logado", {
     nomeAdm.textContent = "Erro ao obter informações do usuário.";
   });
 
-// Inicialização
 window.addEventListener("DOMContentLoaded", () => {
   const modoSelecionado = document.querySelector(
     'input[name="modo"]:checked'
@@ -104,4 +112,47 @@ window.addEventListener("DOMContentLoaded", () => {
 
   carregarFilmes();
   carregarUsuarios();
+});
+
+// Formulário de adicionar usuário pelo ADM
+document.getElementById("form-usuario").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const username = document.getElementById("nome-usuario").value.trim();
+  const user_email = document.getElementById("email-usuario").value.trim();
+  const user_password = document.getElementById("senha-usuario").value;
+  const user_role = document.getElementById("cargo-usuario").value;
+
+  fetch("http://localhost:3001/api/cadastrar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, user_email, user_password, user_role }),
+  })
+    .then((res) => {
+      if (!res.ok) return res.json().then((e) => Promise.reject(e));
+      return res.json();
+    })
+    .then((resposta) => {
+      alert("Usuário adicionado com sucesso!");
+      carregarUsuarios(); // Atualiza a tabela
+      document.getElementById("form-usuario").reset();
+    })
+    .catch((erro) => {
+      alert(erro.erro || "Erro ao adicionar usuário.");
+    });
+});
+
+document.querySelectorAll(".toggle-senha").forEach((botao) => {
+  botao.addEventListener("click", () => {
+    const inputId = botao.dataset.input;
+    const input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+      input.type = "text";
+      botao.textContent = "🙈";
+    } else {
+      input.type = "password";
+      botao.textContent = "👁️";
+    }
+  });
 });
