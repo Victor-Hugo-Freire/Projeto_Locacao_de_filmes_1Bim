@@ -71,7 +71,11 @@ formCadastro?.addEventListener("submit", (e) => {
   const user_password = document.getElementById("cad-password").value.trim();
   const user_role = "user";
 
-  // ✅ Validações
+  if (username.length < 4) {
+    alert("O nome de usuário deve ter mais de 4 caracteres");
+    return;
+  }
+
   if (!user_email.endsWith("@gmail.com")) {
     alert("O e-mail precisa ser do tipo @gmail.com");
     return;

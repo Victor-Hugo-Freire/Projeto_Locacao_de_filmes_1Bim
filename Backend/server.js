@@ -1,6 +1,8 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const fs = require("fs");
+
 const app = express();
 const port = 3001;
 
@@ -42,7 +44,7 @@ app.post("/api/login", (req, res) => {
     const usuario = usuarios.find(
       (u) =>
         (u.user_email === username || u.username === username) &&
-        u.user_password === senha // <- Aqui está o fix
+        u.user_password === senha
     );
 
     if (usuario) {
@@ -55,7 +57,6 @@ app.post("/api/login", (req, res) => {
         },
         { httpOnly: false, sameSite: "Lax" }
       );
-
       res.json({ sucesso: true });
     } else {
       res.status(401).json({ erro: "Credenciais inválidas" });
@@ -63,10 +64,15 @@ app.post("/api/login", (req, res) => {
   });
 });
 
-const fs = require("fs");
-
 app.post("/api/cadastrar", (req, res) => {
   const { username, user_email, user_password, user_role } = req.body;
+
+  if (username.trim().length < 4) {
+    return res
+      .status(400)
+      .json({ erro: "O nome de usuário deve ter mais de 4 caracteres" });
+  }
+
   const caminho = path.join(__dirname, "Dados", "users.csv");
 
   fs.readFile(caminho, "utf-8", (err, data) => {
@@ -90,7 +96,7 @@ app.post("/api/cadastrar", (req, res) => {
         }
         return null;
       })
-      .filter(Boolean); // remove nulls (linhas inválidas ou em branco)
+      .filter(Boolean);
 
     const nomeJaExiste = usuarios.some(
       (u) => u.username.toLowerCase() === username.toLowerCase()
@@ -109,7 +115,11 @@ app.post("/api/cadastrar", (req, res) => {
       return res.status(400).json({ erro: "E-mail já cadastrado" });
     }
 
-    const novaLinha = `"${username}","${user_password}","${user_email}","${user_role}"\n`;
+    const novaLinhaBruta = `"${username}","${user_password}","${user_email}","${user_role}"\n`;
+    const novaLinha = data.endsWith("\n")
+      ? novaLinhaBruta
+      : `\n${novaLinhaBruta}`;
+
     fs.appendFile(caminho, novaLinha, (err) => {
       if (err) {
         console.error("Erro ao salvar no CSV:", err);
