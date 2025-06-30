@@ -88,23 +88,20 @@ app.post("/api/cadastrar", (req, res) => {
 
   const caminho = path.join(__dirname, "Dados", "users.csv");
 
-  fs.readFile(caminho, "utf-8", (err, data) => {
-    if (err) {
-      console.error("Erro ao ler o arquivo CSV:", err);
-      return res.status(500).json({ erro: "Erro ao acessar base de usuários" });
-    }
-
-    const linhas = data.trim().split("\n").slice(1); // ignora cabeçalho
+  try {
+    const data = fs.readFileSync(caminho, "utf-8");
+    const linhas = data.trim().split("\n").slice(1);
 
     const usuarios = linhas
       .map((linha) => {
         const partes = linha.match(/"([^"]*)"/g);
-        if (partes && partes.length === 4) {
+        if (partes && partes.length === 5) {
           return {
-            username: partes[0].replace(/"/g, "").trim(),
-            password: partes[1].replace(/"/g, "").trim(),
-            email: partes[2].replace(/"/g, "").trim(),
-            role: partes[3].replace(/"/g, "").trim(),
+            user_id: partes[0].replace(/"/g, "").trim(),
+            username: partes[1].replace(/"/g, "").trim(),
+            password: partes[2].replace(/"/g, "").trim(),
+            email: partes[3].replace(/"/g, "").trim(),
+            role: partes[4].replace(/"/g, "").trim(),
           };
         }
         return null;
@@ -128,19 +125,20 @@ app.post("/api/cadastrar", (req, res) => {
       return res.status(400).json({ erro: "E-mail já cadastrado" });
     }
 
-    // Criptografar senha
     bcrypt.hash(user_password, saltRounds, (err, hash) => {
       if (err) {
         console.error("Erro ao gerar hash:", err);
         return res.status(500).json({ erro: "Erro ao processar senha" });
       }
 
-      const novaLinhaBruta = `"${username}","${hash}","${user_email}","${user_role}"\n`;
-      const novaLinha = data.endsWith("\n")
-        ? novaLinhaBruta
-        : `\n${novaLinhaBruta}`;
+      const ultimosIds = usuarios
+        .map((u) => parseInt(u.user_id.replace("U", "")))
+        .filter((n) => !isNaN(n));
+      const maiorId = ultimosIds.length ? Math.max(...ultimosIds) : 0;
+      const user_id = `U${maiorId + 1}`;
 
-      fs.appendFile(caminho, novaLinha, (err) => {
+      const novaLinhaBruta = `"${user_id}","${username}","${hash}","${user_email}","${user_role}"\n`;
+      fs.appendFile(caminho, novaLinhaBruta, (err) => {
         if (err) {
           console.error("Erro ao salvar no CSV:", err);
           return res.status(500).json({ erro: "Erro ao cadastrar usuário" });
@@ -148,7 +146,10 @@ app.post("/api/cadastrar", (req, res) => {
         res.json({ sucesso: true });
       });
     });
-  });
+  } catch (err) {
+    console.error("Erro ao ler arquivo CSV:", err);
+    return res.status(500).json({ erro: "Erro ao acessar base de usuários" });
+  }
 });
 
 app.get("/api/usuario-logado", (req, res) => {
@@ -167,6 +168,98 @@ app.post("/api/logout", (req, res) => {
 app.get("/api/usuarios", (req, res) => {
   lerUsuariosCSV((usuarios) => {
     res.json(usuarios);
+  });
+});
+
+app.delete("/api/usuarios", (req, res) => {
+  const { user_id } = req.body;
+  const caminhoCSV = path.join(__dirname, "Dados", "users.csv");
+
+  fs.readFile(caminhoCSV, "utf-8", (err, data) => {
+    if (err) {
+      console.error("Erro ao ler CSV:", err);
+      return res.status(500).json({ erro: "Erro ao acessar base de usuários" });
+    }
+
+    const linhas = data.trim().split("\n");
+    const cabecalho = linhas[0];
+    const corpo = linhas.slice(1);
+
+    const novaLista = corpo.filter((linha) => {
+      const partes = linha.match(/"([^"]*)"/g);
+      if (!partes) return true;
+      const idAtual = partes[0].replace(/"/g, "").trim();
+      return idAtual !== user_id;
+    });
+
+    const resultado = [cabecalho, ...novaLista].join("\n") + "\n";
+
+    fs.writeFile(caminhoCSV, resultado, (err) => {
+      if (err) {
+        console.error("Erro ao salvar novo CSV:", err);
+        return res.status(500).json({ erro: "Erro ao excluir usuário" });
+      }
+      res.json({ sucesso: true });
+    });
+  });
+});
+
+app.put("/api/editar-usuario", (req, res) => {
+  const { usernameAntigo, novoNome, novoEmail, novoCargo } = req.body;
+  const caminhoCSV = path.join(__dirname, "Dados", "users.csv");
+
+  fs.readFile(caminhoCSV, "utf-8", (err, data) => {
+    if (err) return res.status(500).json({ erro: "Erro ao acessar base" });
+
+    const linhas = data.trim().split("\n");
+    const cabecalho = linhas[0];
+    const atualizadas = linhas.slice(1).map((linha) => {
+      const partes = linha.match(/"([^"]*)"/g);
+      if (!partes || partes.length !== 5) return linha;
+
+      const nomeAtual = partes[1].replace(/"/g, ""); // username
+      if (nomeAtual !== usernameAntigo) return linha;
+
+      const user_id = partes[0];
+      const senha = partes[2];
+      return `${user_id},"${novoNome}",${senha},"${novoEmail}","${novoCargo}"`;
+    });
+
+    const final = [cabecalho, ...atualizadas].join("\n") + "\n";
+    fs.writeFile(caminhoCSV, final, (err) => {
+      if (err) return res.status(500).json({ erro: "Erro ao salvar edição" });
+      res.json({ sucesso: true });
+    });
+  });
+});
+
+app.put("/api/promover", (req, res) => {
+  const { username } = req.body;
+  const caminhoCSV = path.join(__dirname, "Dados", "users.csv");
+
+  fs.readFile(caminhoCSV, "utf-8", (err, data) => {
+    if (err) return res.status(500).json({ erro: "Erro ao acessar base" });
+
+    const linhas = data.trim().split("\n");
+    const cabecalho = linhas[0];
+    const atualizadas = linhas.slice(1).map((linha) => {
+      const partes = linha.match(/"([^"]*)"/g);
+      if (!partes || partes.length !== 5) return linha;
+
+      const nomeAtual = partes[1].replace(/"/g, "");
+      if (nomeAtual !== username) return linha;
+
+      const user_id = partes[0];
+      const senha = partes[2];
+      const email = partes[3];
+      return `${user_id},"${nomeAtual}",${senha},${email},"ADM"`;
+    });
+
+    const final = [cabecalho, ...atualizadas].join("\n") + "\n";
+    fs.writeFile(caminhoCSV, final, (err) => {
+      if (err) return res.status(500).json({ erro: "Erro ao salvar promoção" });
+      res.json({ sucesso: true });
+    });
   });
 });
 
