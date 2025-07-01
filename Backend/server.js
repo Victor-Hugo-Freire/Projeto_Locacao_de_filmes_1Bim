@@ -40,6 +40,51 @@ app.get("/api/filmes", (req, res) => {
   });
 });
 
+app.put("/api/editar-filme", (req, res) => {
+  const { movie_id, movie_title, movie_description, price, image, category } =
+    req.body;
+  const caminhoCSV = path.join(__dirname, "Dados", "movies.csv");
+
+  const filmesAtualizados = [];
+
+  fs.createReadStream(caminhoCSV)
+    .pipe(csv())
+    .on("data", (filme) => {
+      if (filme.movie_id === movie_id) {
+        // Substitui os dados do filme atual
+        filmesAtualizados.push({
+          movie_id,
+          movie_title,
+          movie_description,
+          price,
+          category,
+        });
+      } else {
+        filmesAtualizados.push(filme);
+      }
+    })
+    .on("end", () => {
+      const cabecalho = Object.keys(filmesAtualizados[0]).join(",");
+      const linhas = filmesAtualizados.map((filme) => {
+        return `"${filme.movie_id}","${filme.movie_title}","${filme.movie_description}","${filme.price}","${filme.image}","${filme.category}"`;
+      });
+
+      const novoCSV = cabecalho + "\n" + linhas.join("\n") + "\n";
+
+      fs.writeFile(caminhoCSV, novoCSV, (err) => {
+        if (err) {
+          console.error("Erro ao salvar edição de filme:", err);
+          return res.status(500).json({ erro: "Erro ao salvar edição" });
+        }
+        res.json({ sucesso: true });
+      });
+    })
+    .on("error", (err) => {
+      console.error("Erro ao ler CSV:", err);
+      res.status(500).json({ erro: "Erro ao acessar base de filmes" });
+    });
+});
+
 app.delete("/api/filmes", (req, res) => {
   const { movie_id } = req.body;
   const caminhoCSV = path.join(__dirname, "Dados", "movies.csv");

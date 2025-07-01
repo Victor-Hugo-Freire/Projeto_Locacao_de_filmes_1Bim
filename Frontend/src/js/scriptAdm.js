@@ -188,6 +188,59 @@ function excluirFilme(movie_id) {
     });
 }
 
+function editarFilme(movie_id) {
+  // Busca o filme atual pelo ID
+  fetch("http://localhost:3001/api/filmes")
+    .then((res) => res.json())
+    .then((filmes) => {
+      const filme = filmes.find((f) => f.movie_id === movie_id);
+      if (!filme) {
+        alert("Filme não encontrado!");
+        return;
+      }
+
+      // Prompts para editar os campos
+      const novoTitulo = prompt("Novo título:", filme.movie_title);
+      if (!novoTitulo) return;
+
+      const novaDescricao = prompt("Nova descrição:", filme.movie_description);
+      if (!novaDescricao) return;
+
+      const novoPreco = prompt("Novo preço:", filme.price);
+      if (!novoPreco || isNaN(parseFloat(novoPreco))) {
+        alert("Preço inválido.");
+        return;
+      }
+
+      const novaCategoria = prompt("Nova categoria:", filme.category);
+      if (!novaCategoria) return;
+
+      fetch("http://localhost:3001/api/editar-filme", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          movie_id,
+          movie_title: novoTitulo,
+          movie_description: novaDescricao,
+          price: parseFloat(novoPreco).toFixed(2),
+          category: novaCategoria,
+        }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Erro ao editar filme");
+          return res.json();
+        })
+        .then(() => {
+          alert("Filme atualizado com sucesso!");
+          carregarFilmes();
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Erro ao atualizar filme.");
+        });
+    });
+}
+
 // Adicionar usuário (ADM)
 document.getElementById("form-usuario").addEventListener("submit", (e) => {
   e.preventDefault();
