@@ -26,19 +26,20 @@ function carregarFilmes() {
 
 function preencherTabelaFilmes(filmes) {
   tabelaFilmes.innerHTML = "";
-  filmes.forEach((filme, index) => {
+  filmes.forEach((filme) => {
     const linha = document.createElement("tr");
     linha.innerHTML = `
-      <td>${filme.movie_title}</td>
-      <td>${filme.movie_description}</td>
-      <td>R$${parseFloat(filme.price).toFixed(2)}</td>
-      <td><img src="${filme.image}" alt="img" width="50" /></td>
-      <td>${filme.category}</td>
-      <td>
-        <button onclick="editarFilme(${index})">Editar</button>
-        <button onclick="excluirFilme(${index})">Excluir</button>
-      </td>
-    `;
+  <td>${filme.movie_id}</td>
+  <td>${filme.movie_title}</td>
+  <td>${filme.movie_description}</td>
+  <td>R$${parseFloat(filme.price).toFixed(2)}</td>
+  <td><img src="${filme.image}" alt="img" width="50" /></td>
+  <td>${filme.category}</td>
+  <td>
+    <button onclick="editarFilme('${filme.movie_id}')">Editar</button>
+    <button onclick="excluirFilme('${filme.movie_id}')">Excluir</button>
+  </td>
+`;
     tabelaFilmes.appendChild(linha);
   });
 }
@@ -165,13 +166,13 @@ function editarUsuario(username, email, role) {
     });
 }
 
-function excluirFilme(index) {
+function excluirFilme(movie_id) {
   if (!confirm("Tem certeza que deseja excluir este filme?")) return;
 
   fetch("http://localhost:3001/api/filmes", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ index }),
+    body: JSON.stringify({ movie_id }),
   })
     .then((res) => {
       if (!res.ok) throw new Error("Erro ao excluir filme");

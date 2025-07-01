@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
+const csv = require("csv-parser");
 
 const app = express();
 const port = 3001;
@@ -37,6 +38,62 @@ app.get("/api/filmes", (req, res) => {
   lerFilmesCSV((filmes) => {
     res.json(filmes);
   });
+});
+
+app.delete("/api/filmes", (req, res) => {
+  const { movie_id } = req.body;
+  const caminhoCSV = path.join(__dirname, "Dados", "movies.csv");
+
+  const filmesRestantes = [];
+
+  // Ler o CSV usando csv-parser
+  fs.createReadStream(caminhoCSV)
+    .pipe(csv())
+    .on("data", (filme) => {
+      if (filme.movie_id !== movie_id) {
+        filmesRestantes.push(filme);
+      }
+    })
+    .on("end", () => {
+      if (filmesRestantes.length === 0) {
+        // Se removeu todos, pode manter o cabeçalho só
+        const cabecalho =
+          "movie_id,movie_title,movie_description,price,image,category\n";
+        fs.writeFile(caminhoCSV, cabecalho, (err) => {
+          if (err) {
+            console.error("Erro ao salvar CSV:", err);
+            return res
+              .status(500)
+              .json({ erro: "Erro ao salvar base de filmes" });
+          }
+          return res.json({ sucesso: true });
+        });
+        return;
+      }
+
+      // Montar o CSV novamente, com cabeçalho e linhas dos filmes restantes
+      const cabecalho = Object.keys(filmesRestantes[0]).join(",");
+      const linhas = filmesRestantes.map((filme) => {
+        return `"${filme.movie_id}","${filme.movie_title}","${filme.movie_description}","${filme.price}","${filme.image}","${filme.category}"`;
+      });
+
+      const novoCSV = cabecalho + "\n" + linhas.join("\n") + "\n";
+
+      // Escrever o CSV atualizado
+      fs.writeFile(caminhoCSV, novoCSV, (err) => {
+        if (err) {
+          console.error("Erro ao salvar CSV:", err);
+          return res
+            .status(500)
+            .json({ erro: "Erro ao salvar base de filmes" });
+        }
+        res.json({ sucesso: true });
+      });
+    })
+    .on("error", (err) => {
+      console.error("Erro ao ler CSV:", err);
+      res.status(500).json({ erro: "Erro ao acessar base de filmes" });
+    });
 });
 
 app.post("/api/login", (req, res) => {
