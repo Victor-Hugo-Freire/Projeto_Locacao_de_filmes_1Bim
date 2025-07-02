@@ -4,10 +4,28 @@ const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const csv = require("csv-parser");
+const multer = require("multer");
 
 const app = express();
 const port = 3001;
 const saltRounds = 12;
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../Frontend/src/imgs"));
+  },
+  filename: (req, file, cb) => {
+    const { nomeImagemAntiga } = req.body;
+    if (nomeImagemAntiga) {
+      const nomeOriginal = path.basename(nomeImagemAntiga);
+      cb(null, nomeOriginal);
+    } else {
+      cb(null, Date.now() + "-" + file.originalname);
+    }
+  },
+});
+
+const upload = multer({ storage });
 
 app.use(express.json());
 app.use(cookieParser());
@@ -18,7 +36,7 @@ app.use((req, res, next) => {
   if (allowedOrigins.includes(origin)) {
     res.header("Access-Control-Allow-Origin", origin);
   }
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type");
   res.header("Access-Control-Allow-Credentials", "true");
   next();
@@ -26,6 +44,10 @@ app.use((req, res, next) => {
 
 const frontendPath = path.join(__dirname, "../Frontend");
 app.use(express.static(frontendPath));
+app.use(
+  "/src/imgs",
+  express.static(path.join(__dirname, "../Frontend/src/imgs"))
+);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
@@ -35,28 +57,106 @@ const lerFilmesCSV = require("./lerFilmesCSV");
 const lerUsuariosCSV = require("./lerUsuariosCSV");
 
 app.get("/api/filmes", (req, res) => {
-  lerFilmesCSV((filmes) => {
-    res.json(filmes);
-  });
+  lerFilmesCSV((filmes) => res.json(filmes));
 });
 
-app.put("/api/editar-filme", (req, res) => {
-  const { movie_id, movie_title, movie_description, price, image, category } =
-    req.body;
+app.post("/api/novo-filme", upload.single("imagem"), (req, res) => {
   const caminhoCSV = path.join(__dirname, "Dados", "movies.csv");
+  const { movie_title, movie_description, price, category } = req.body;
 
+  if (!req.file || !movie_title || !movie_description || !price || !category) {
+    return res.status(400).json({ erro: "Dados ou imagem inválidos" });
+  }
+
+  const prefixos = { cinemas: "home", lancamentos: "new", populares: "m" };
+  const prefixo = prefixos[category];
+  if (!prefixo) return res.status(400).json({ erro: "Categoria inválida" });
+
+  const filmes = [];
+  fs.createReadStream(caminhoCSV)
+    .pipe(csv())
+    .on("data", (linha) => filmes.push(linha))
+    .on("end", () => {
+      const idsCategoria = filmes
+        .filter((f) => f.category === category)
+        .map((f) => parseInt(f.movie_id.replace(prefixo, "")))
+        .filter((n) => !isNaN(n));
+      const novoId =
+        prefixo + (idsCategoria.length ? Math.max(...idsCategoria) + 1 : 1);
+
+      const extensao = path.extname(req.file.originalname);
+      const novoNomeImagem = novoId + extensao;
+      const destinoImagem = path.join(
+        __dirname,
+        "../Frontend/src/imgs",
+        novoNomeImagem
+      );
+
+      fs.rename(req.file.path, destinoImagem, (err) => {
+        if (err) return res.status(500).json({ erro: "Erro ao salvar imagem" });
+
+        const novaLinha = {
+          movie_id: novoId,
+          movie_title,
+          movie_description,
+          price: parseFloat(price).toFixed(2),
+          image: `/src/imgs/${novoNomeImagem}`,
+          category,
+        };
+
+        filmes.push(novaLinha);
+        const cabecalho = Object.keys(novaLinha).join(",");
+        const linhas = filmes.map(
+          (f) =>
+            `"${f.movie_id}","${f.movie_title}","${f.movie_description}","${f.price}","${f.image}","${f.category}"`
+        );
+
+        fs.writeFile(
+          caminhoCSV,
+          cabecalho + "\n" + linhas.join("\n") + "\n",
+          (err) => {
+            if (err)
+              return res.status(500).json({ erro: "Erro ao salvar filme" });
+            res.json({ sucesso: true, movie_id: novoId });
+          }
+        );
+      });
+    })
+    .on("error", () =>
+      res.status(500).json({ erro: "Erro ao acessar base de filmes" })
+    );
+});
+
+app.put("/api/editar-filme", upload.single("imagem"), (req, res) => {
+  const caminhoCSV = path.join(__dirname, "Dados", "movies.csv");
   const filmesAtualizados = [];
+
+  // Verifica se é JSON ou FormData com imagem
+  const temImagem = req.file !== undefined;
+
+  const movie_id = temImagem ? req.body.movie_id : req.body.movie_id;
+  const movie_title = temImagem ? req.body.movie_title : req.body.movie_title;
+  const movie_description = temImagem
+    ? req.body.movie_description
+    : req.body.movie_description;
+  const price = temImagem ? req.body.price : req.body.price;
+  const category = temImagem ? req.body.category : req.body.category;
+  const imagem = temImagem
+    ? `/src/imgs/${path.basename(
+        req.body.nomeImagemAntiga || req.file.filename
+      )}`
+    : null;
 
   fs.createReadStream(caminhoCSV)
     .pipe(csv())
     .on("data", (filme) => {
       if (filme.movie_id === movie_id) {
-        // Substitui os dados do filme atual
         filmesAtualizados.push({
           movie_id,
           movie_title,
           movie_description,
           price,
+          image: imagem || filme.image, // mantém imagem antiga se nenhuma nova
           category,
         });
       } else {
@@ -73,8 +173,8 @@ app.put("/api/editar-filme", (req, res) => {
 
       fs.writeFile(caminhoCSV, novoCSV, (err) => {
         if (err) {
-          console.error("Erro ao salvar edição de filme:", err);
-          return res.status(500).json({ erro: "Erro ao salvar edição" });
+          console.error("Erro ao salvar CSV:", err);
+          return res.status(500).json({ erro: "Erro ao salvar" });
         }
         res.json({ sucesso: true });
       });
@@ -90,48 +190,47 @@ app.delete("/api/filmes", (req, res) => {
   const caminhoCSV = path.join(__dirname, "Dados", "movies.csv");
 
   const filmesRestantes = [];
+  let imagemParaExcluir = null;
 
-  // Ler o CSV usando csv-parser
   fs.createReadStream(caminhoCSV)
     .pipe(csv())
     .on("data", (filme) => {
-      if (filme.movie_id !== movie_id) {
+      if (filme.movie_id === movie_id) {
+        imagemParaExcluir = filme.image; // guarda imagem que será excluída
+      } else {
         filmesRestantes.push(filme);
       }
     })
     .on("end", () => {
+      // Se removeu todos os filmes, salva só o cabeçalho
       if (filmesRestantes.length === 0) {
-        // Se removeu todos, pode manter o cabeçalho só
         const cabecalho =
           "movie_id,movie_title,movie_description,price,image,category\n";
         fs.writeFile(caminhoCSV, cabecalho, (err) => {
           if (err) {
             console.error("Erro ao salvar CSV:", err);
-            return res
-              .status(500)
-              .json({ erro: "Erro ao salvar base de filmes" });
+            return res.status(500).json({ erro: "Erro ao salvar CSV" });
           }
+          deletarImagem(imagemParaExcluir);
           return res.json({ sucesso: true });
         });
         return;
       }
 
-      // Montar o CSV novamente, com cabeçalho e linhas dos filmes restantes
       const cabecalho = Object.keys(filmesRestantes[0]).join(",");
-      const linhas = filmesRestantes.map((filme) => {
-        return `"${filme.movie_id}","${filme.movie_title}","${filme.movie_description}","${filme.price}","${filme.image}","${filme.category}"`;
+      const linhas = filmesRestantes.map((f) => {
+        return `"${f.movie_id}","${f.movie_title}","${f.movie_description}","${f.price}","${f.image}","${f.category}"`;
       });
 
       const novoCSV = cabecalho + "\n" + linhas.join("\n") + "\n";
 
-      // Escrever o CSV atualizado
       fs.writeFile(caminhoCSV, novoCSV, (err) => {
         if (err) {
           console.error("Erro ao salvar CSV:", err);
-          return res
-            .status(500)
-            .json({ erro: "Erro ao salvar base de filmes" });
+          return res.status(500).json({ erro: "Erro ao salvar CSV" });
         }
+
+        deletarImagem(imagemParaExcluir);
         res.json({ sucesso: true });
       });
     })
@@ -140,6 +239,19 @@ app.delete("/api/filmes", (req, res) => {
       res.status(500).json({ erro: "Erro ao acessar base de filmes" });
     });
 });
+
+// Função auxiliar para excluir imagem física
+function deletarImagem(caminhoRelativo) {
+  if (!caminhoRelativo) return;
+
+  const caminhoAbsoluto = path.join(__dirname, "../Frontend", caminhoRelativo);
+
+  fs.unlink(caminhoAbsoluto, (err) => {
+    if (err && err.code !== "ENOENT") {
+      console.error("Erro ao excluir imagem:", err);
+    }
+  });
+}
 
 app.post("/api/login", (req, res) => {
   const { username, senha } = req.body;

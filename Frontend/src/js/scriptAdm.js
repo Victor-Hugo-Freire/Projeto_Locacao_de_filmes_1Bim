@@ -189,17 +189,12 @@ function excluirFilme(movie_id) {
 }
 
 function editarFilme(movie_id) {
-  // Busca o filme atual pelo ID
   fetch("http://localhost:3001/api/filmes")
     .then((res) => res.json())
     .then((filmes) => {
       const filme = filmes.find((f) => f.movie_id === movie_id);
-      if (!filme) {
-        alert("Filme não encontrado!");
-        return;
-      }
+      if (!filme) return alert("Filme não encontrado!");
 
-      // Prompts para editar os campos
       const novoTitulo = prompt("Novo título:", filme.movie_title);
       if (!novoTitulo) return;
 
@@ -215,31 +210,137 @@ function editarFilme(movie_id) {
       const novaCategoria = prompt("Nova categoria:", filme.category);
       if (!novaCategoria) return;
 
-      fetch("http://localhost:3001/api/editar-filme", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          movie_id,
-          movie_title: novoTitulo,
-          movie_description: novaDescricao,
-          price: parseFloat(novoPreco).toFixed(2),
-          category: novaCategoria,
-        }),
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("Erro ao editar filme");
-          return res.json();
-        })
-        .then(() => {
-          alert("Filme atualizado com sucesso!");
-          carregarFilmes();
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("Erro ao atualizar filme.");
+      if (confirm("Deseja trocar a imagem do filme?")) {
+        // Criar input imediatamente dentro do evento do clique
+        const inputImagem = document.createElement("input");
+        inputImagem.type = "file";
+        inputImagem.accept = "image/*";
+        inputImagem.style.display = "none";
+
+        document.body.appendChild(inputImagem);
+
+        inputImagem.addEventListener("change", () => {
+          if (inputImagem.files.length === 0) return;
+
+          const formData = new FormData();
+          formData.append("movie_id", movie_id);
+          formData.append("movie_title", novoTitulo);
+          formData.append("movie_description", novaDescricao);
+          formData.append("price", parseFloat(novoPreco).toFixed(2));
+          formData.append("category", novaCategoria);
+          formData.append("nomeImagemAntiga", filme.image);
+          formData.append("imagem", inputImagem.files[0]);
+
+          fetch("http://localhost:3001/api/editar-filme", {
+            method: "PUT",
+            body: formData,
+          })
+            .then((res) => {
+              if (!res.ok) throw new Error("Erro ao editar filme");
+              return res.json();
+            })
+            .then(() => {
+              alert("Filme atualizado com nova imagem!");
+              carregarFilmes();
+            })
+            .catch((err) => {
+              console.error(err);
+              alert("Erro ao atualizar filme com nova imagem.");
+            });
         });
+
+        // ABRE o seletor de imagem imediatamente no clique do usuário
+        inputImagem.click();
+      } else {
+        // Editar sem trocar imagem
+        fetch("http://localhost:3001/api/editar-filme", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            movie_id,
+            movie_title: novoTitulo,
+            movie_description: novaDescricao,
+            price: parseFloat(novoPreco).toFixed(2),
+            category: novaCategoria,
+          }),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error("Erro ao editar filme");
+            return res.json();
+          })
+          .then(() => {
+            alert("Filme atualizado com sucesso!");
+            carregarFilmes();
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("Erro ao atualizar filme.");
+          });
+      }
     });
 }
+
+document.getElementById("form-filme").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const titulo = document.getElementById("titulo-filme").value.trim();
+  const descricao = document.getElementById("descricao-filme").value.trim();
+  const preco = document.getElementById("preco-filme").value;
+  const imagemInput = document.getElementById("imagem-filme");
+  const categoria = document.getElementById("categoria-filme").value;
+
+  if (titulo.length === 0) {
+    alert("O título do filme é obrigatório.");
+    return;
+  }
+
+  if (descricao.length < 20) {
+    alert("A descrição deve ter no mínimo 20 caracteres.");
+    return;
+  }
+
+  if (preco === "" || isNaN(parseFloat(preco))) {
+    alert("Informe um preço válido.");
+    return;
+  }
+
+  if (imagemInput.files.length === 0) {
+    alert("Selecione uma imagem para o filme.");
+    return;
+  }
+
+  if (!categoria) {
+    alert("Selecione uma categoria.");
+    return;
+  }
+
+  // Criar FormData para enviar imagem + dados
+  const formData = new FormData();
+  formData.append("movie_title", titulo);
+  formData.append("movie_description", descricao);
+  formData.append("price", parseFloat(preco).toFixed(2));
+  formData.append("category", categoria);
+  formData.append("imagem", imagemInput.files[0]);
+
+  fetch("http://localhost:3001/api/novo-filme", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Erro ao adicionar filme");
+      return res.json();
+    })
+    .then((data) => {
+      alert("Filme adicionado com sucesso!");
+      // Limpar formulário
+      document.getElementById("form-filme").reset();
+      carregarFilmes(); // atualizar lista
+    })
+    .catch((erro) => {
+      console.error(erro);
+      alert("Erro ao adicionar filme.");
+    });
+});
 
 // Adicionar usuário (ADM)
 document.getElementById("form-usuario").addEventListener("submit", (e) => {

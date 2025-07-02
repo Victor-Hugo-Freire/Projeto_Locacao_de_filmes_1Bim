@@ -21,6 +21,7 @@
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "csv-parser": "^3.2.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "multer": "^2.0.1"
   }
 }

@@ -33,7 +33,7 @@
       <!-- Seção para filmes -->
       <section id="secao-filmes">
         <h2>Adicionar/Atualizar Filme</h2>
-        <form id="form-filme">
+        <form id="form-filme" enctype="multipart/form-data">
           <input
             type="text"
             id="titulo-filme"
@@ -53,12 +53,7 @@
             required
             step="0.01"
           />
-          <input
-            type="file"
-            id="imagem-filme"
-            placeholder="Caminho da imagem"
-            required
-          />
+          <input type="file" id="imagem-filme" required />
           <select id="categoria-filme" required>
             <option value="cinemas">Cinemas</option>
             <option value="lancamentos">Lançamentos</option>
